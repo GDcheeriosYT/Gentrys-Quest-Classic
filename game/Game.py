@@ -13,7 +13,7 @@ from Content.Stories.Intro import Intro
 from Content.Gachas.ValleyHighSchool import ValleyHighSchool
 from Content.Gachas.BaseGacha import BaseGacha
 from Content.CharacterContentManager import CharacterContentManager
-from Content.Stories.GentrysQuest import GentrysQuest
+#from Content.Stories.GentrysQuest import GentrysQuest
 
 # collection packages
 from Collection.ItemList import ItemList

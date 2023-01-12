@@ -1,4 +1,12 @@
 [[package]]
+name = "argparse"
+version = "1.4.0"
+description = "Python command-line parsing library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "certifi"
 version = "2022.6.15.1"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -113,9 +121,10 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "44d8d284923252675bc503a5f9cc4e1cf3a22bda8f90fca881ed1300d4aa07d1"
+content-hash = "e70e56a62948525cedc1026bd8b59021ec28bf6c5a30db98d252947923d6f894"
 
 [metadata.files]
+argparse = []
 certifi = []
 charset-normalizer = []
 commonmark = []
