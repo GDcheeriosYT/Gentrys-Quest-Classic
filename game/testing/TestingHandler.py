@@ -54,7 +54,7 @@ class TestingHandler:
                 Window.clear()
 
             elif choices == 5:
-                display_changelog()
+                display_changelog("Testing")
 
             else:
                 break

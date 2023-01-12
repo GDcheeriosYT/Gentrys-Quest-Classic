@@ -134,10 +134,12 @@ class Inventory:
             if choice == 1:
                 if is_equipped:
                     artifact = self.swap_artifact(artifact)
+
             elif choice == 2:
                 if is_equipped:
                     self.artifact_list.add(artifact)
                     return None
+
             elif choice == 3:
                 if artifact.experience.level != artifact.experience.limit:
                     if not is_equipped:
@@ -162,8 +164,12 @@ class Inventory:
                             break
 
                         elif isinstance(inp, list):
-                            for selection in inp:
-                                artifact.add_xp(self.exchange_artifact(self.artifact_list.get(0)))
+                            counter = 0
+                            while counter < len(inp):
+                                artifact.add_xp(self.exchange_artifact(self.artifact_list.get(inp[counter])))
+                                inp = [x - 1 for x in inp]
+                                counter += 1
+
                                 if artifact.experience.level == artifact.experience.limit:
                                     break
 
@@ -210,8 +216,11 @@ class Inventory:
                     break
 
                 elif isinstance(inp, list):
-                    for selection in inp:
-                        weapon.add_xp(self.exchange_weapon(self.weapon_list.get(0)))
+                    counter = 0
+                    while counter < len(inp):
+                        weapon.add_xp(self.exchange_weapon(self.weapon_list.get(inp[counter])))
+                        inp = [x - 1 for x in inp]
+                        counter += 1
 
                     break
 
