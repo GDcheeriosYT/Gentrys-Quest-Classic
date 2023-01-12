@@ -16,7 +16,8 @@ gameplay = [
     InfoText("Changed Gacha to give duplicate weapons rather than upgrading weapons! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
     InfoText("Added multiple selection of items when upgrading weapon or artifacts! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
     InfoText("Added visualization of item after leveling up! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
-    InfoText("Reworked Inventory Functions! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios")
+    InfoText("Reworked Inventory Functions! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
+    InfoText("Added display of what character you have equipped when in travel menu! by GDcheerios")
 ]
 graphics = []
 content = [

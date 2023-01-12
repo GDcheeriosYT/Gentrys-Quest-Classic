@@ -62,6 +62,22 @@ class API:
         online_players.sort(key=sort_thing)
         return online_players
 
+    def get_leaderboard(self):
+        player_list: dict = requests.get(f"{self.url}/api/gq/get-leaderboard/0+10").json()
+        leaderboard = []
+
+        for id in player_list.keys():
+            user = User(int(id), player_list[id]["username"], player_list[id]["power level"])
+            user.ranking = player_list[id]["ranking"]
+            leaderboard.append(user)
+
+        def sort_thing(user: User):
+            return user.ranking
+
+        leaderboard.sort(key=sort_thing)
+        return leaderboard
+
+
     def check_out(self):
         requests.post(f"{self.url}/api/gq/check-out/{self.id}")
 

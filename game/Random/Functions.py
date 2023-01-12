@@ -29,7 +29,7 @@ def determine_crit(crit_rate):
 
 def generate_artifact_star_rating(difficulty):
     # generate a star rating
-    rate = int(10000 / difficulty * 2)
+    rate = int(10000 / difficulty)
     random_number = random.randint(0, rate)
     if random_number <= 25:
         return 5

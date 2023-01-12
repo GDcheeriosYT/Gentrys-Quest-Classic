@@ -185,12 +185,16 @@ class ItemList:
         return self.content.index(item)
 
     def select(self, single: bool = True, remove: bool = True, list_content: bool = True):
+        if self.get_length() == 0:
+            WarningText("This list is empty...").display()
+            return None
+
         if list_content:
             self.list_content(True)
 
         if single:
             index = get_int("pick one\n") - 1
-            if index < 0:
+            if index < 0 or index >= self.get_length():
                 return ""
             item = self.content[index]
             if remove:

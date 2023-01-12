@@ -105,7 +105,7 @@ class Game:
                                   "1. Play\n"
                                   "2. Settings\n"
                                   "3. Credits\n"
-                                  "4. Online Players\n"
+                                  "4. Online\n"
                                   "5. Changelog\n"
                                   "6. Quit")
 
@@ -237,13 +237,35 @@ class Game:
                     enter_to_continue()
 
                 elif choices == 4:
-                    online_status = Status("fetching online users...")
-                    Window.place_rule("Online Users")
-                    online_status.start()
-                    players = ItemList(content=self.server.API.get_online_players())
-                    online_status.stop()
-                    players.list_content(False)
-                    enter_to_continue()
+                    choices2 = get_int("1. Online Users\n"
+                                       "2. Leaderboard\n"
+                                       "3. Back")
+
+                    if choices2 == 1:
+                        Window.place_rule("Online Users")
+                        online_status = Status("Uploading data..")
+                        online_status.start()
+                        self.server.API.upload_data(self.game_data)
+                        online_status.stop()
+                        online_status.modify_status("fetching online users...")
+                        online_status.start()
+                        players = ItemList(content=self.server.API.get_online_players())
+                        online_status.stop()
+                        players.list_content(False)
+                        enter_to_continue()
+
+                    elif choices2 == 2:
+                        Window.place_rule("Gentry's Quest Leaderboard")
+                        online_status = Status("Uploading data..")
+                        online_status.start()
+                        self.server.API.upload_data(self.game_data)
+                        online_status.stop()
+                        online_status.modify_status("fetching leaderboard data...")
+                        online_status.start()
+                        players = ItemList(content=self.server.API.get_leaderboard())
+                        online_status.stop()
+                        players.list_content(False)
+                        enter_to_continue()
 
                 elif choices == 5:
                     display_changelog(self.version)

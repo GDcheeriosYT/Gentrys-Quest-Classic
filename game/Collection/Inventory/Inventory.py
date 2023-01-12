@@ -284,22 +284,32 @@ class Inventory:
                 break
 
     def swap_artifact(self, artifact_to_swap):
-        artifact = self.artifact_list.select()
+        selection = self.artifact_list.select()
 
-        if artifact_to_swap is not None:
-            self.artifact_list.add(artifact_to_swap)
+        if selection != "":
+            artifact = selection
 
-        return artifact
+            if artifact_to_swap is not None:
+                self.artifact_list.add(artifact_to_swap)
+
+            return artifact
 
     def swap_weapon(self, character):
-        character_weapon = character.weapon
-        character.weapon = self.weapon_list.select()
+        if self.weapon_list.get_length() == 0:
+            WarningText("You have no weapons to swap...").display()
 
-        if character_weapon is not None:
-            self.weapon_list.add(character_weapon)
+        else:
+            character_weapon = character.weapon
+            selection = self.weapon_list.select()
 
-        if character.weapon is not None:
-            Text(f"You have equipped {character.weapon.name}").display()
+            if selection != "":
+                character.weapon = selection
+
+                if character_weapon is not None:
+                    self.weapon_list.add(character_weapon)
+
+                if character.weapon is not None:
+                    Text(f"You have equipped {character.weapon.name}").display()
 
     def jsonify(self):
         return {

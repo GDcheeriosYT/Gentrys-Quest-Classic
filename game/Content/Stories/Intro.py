@@ -34,9 +34,9 @@ class Intro(Story):
         enemies = ItemList(content_type=Enemy)
         angry_pedestrian = Enemy(
             "Angry Pedestrian",
-            2,
-            25,
-            1,
+            20,
+            2500,
+            100,
             Weapon(
                 "Knife",
                 "Slices things...",
@@ -60,7 +60,7 @@ class Intro(Story):
             "Keyboard",
             StarRating(1),
             "Gentry",
-            Buff(StatTypes.Health, is_percent=False)
+            Buff(StatTypes.Health, is_percent=True)
         )
         gacha_event = GachaEvent(
             BaseGacha(),

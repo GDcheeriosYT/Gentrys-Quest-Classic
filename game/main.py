@@ -15,6 +15,7 @@ from Online.User.User import User
 # graphic game packages
 from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Content.Text.InfoText import InfoText
+from Graphics.Status import Status
 
 # testing packages
 from testing.TestingHandler import TestingHandler
@@ -77,9 +78,12 @@ else:
         game_data = GameData(user_data["metadata"]["Gentry's Quest data"])
         game = Game(game_data, version, server)
         def byebye():
+            game_status = Status("Uploading data...")
+            game_status.start()
             server.API.upload_data(game.game_data)
             server.API.check_out()
             server.API.token.delete()
+            game_status.stop()
 
         atexit.register(byebye)
         game.start(args.character)
