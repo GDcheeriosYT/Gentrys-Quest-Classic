@@ -239,6 +239,7 @@ class ItemList:
             else:
                 if selection == "done":
                     selection_copy = self.selections
+                    selection_copy.sort()
                     self.selections = []
                     return selection_copy
 
