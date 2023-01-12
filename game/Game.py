@@ -213,7 +213,7 @@ class Game:
                     Text("Max").display()
                     Text("Greg").display()
                     Text("Hanna").display()
-                    Text("Caleb").display()
+                    Text("Caleb", Style(text_color="bright_cyan")).display()
                     Text("Benji").display()
                     Text("Derek").display()
                     Text("Charlie").display()
