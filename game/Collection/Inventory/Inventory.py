@@ -67,7 +67,10 @@ class Inventory:
                 num = get_int(self.__repr__())
                 if num == 1:
                     if is_not_empty(self.character_list.content, "character"):
-                        equipped_character = self.manage_character(self.character_list.select(remove=False))
+                        selection = self.character_list.select(remove=False)
+                        if selection != "":
+                            equipped_character = self.manage_character(selection)
+
                 elif num == 2:
                     if is_not_empty(self.weapon_list.content, "weapon"):
                         self.manage_weapon(self.weapon_list.select(remove=False))
