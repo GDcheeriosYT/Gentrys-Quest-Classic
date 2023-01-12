@@ -41,7 +41,7 @@ class Buff:
     experience = None
     is_percent = None
 
-    def __init__(self, attribute_type=None, experience=None, is_percent=False):
+    def __init__(self, attribute_type: StatTypes = None, experience : Experience = None, is_percent : bool = None):
         if attribute_type is None:
             self.attribute_type = random.choice(list(StatTypes))
         else:
@@ -52,7 +52,11 @@ class Buff:
         else:
             self.experience = experience
 
-        self.is_percent = random.choice([True, False])
+        if is_percent is None:
+            self.is_percent = random.choice([True, False])
+        else:
+            self.is_percent = is_percent
+
         if attribute_type == StatTypes.CritRate or attribute_type == StatTypes.CritDamage:
             self.is_percent = False
 
