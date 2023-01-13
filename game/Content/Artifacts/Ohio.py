@@ -67,7 +67,7 @@ class BarbariansSword(Artifact):
             "Barbarian's Sword",
             star_rating,
             "Ohio",
-            Buff(StatTypes.CritDamage)
+            Buff(StatTypes.Attack)
         )
 
 
