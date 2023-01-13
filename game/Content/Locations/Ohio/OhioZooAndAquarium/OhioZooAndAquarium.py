@@ -19,7 +19,7 @@ from .Enemies.RacoonWith45 import RacoonWith45
 class OhioZooAndAquarium(BattleArea):
     def __init__(self):
         artifact_families = ItemList(content_type=str)
-        artifact_families.add("Ohio's Zoo & Aquarium")
+        artifact_families.add("Ohio")
         enemies = ItemList(content_type=Enemy)
         enemies.add(HarambesCousin())
         enemies.add(FishNamedBryan())
@@ -27,7 +27,7 @@ class OhioZooAndAquarium(BattleArea):
         enemies.add(WinstonOW())
         enemies.add(RacoonWith45())
         super().__init__(
-            "Ohio's Zoo & Aquarium",
+            "Ohio's Zoo and Aquarium",
             0,
             artifact_families,
             enemies,

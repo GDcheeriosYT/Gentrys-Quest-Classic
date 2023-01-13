@@ -11,7 +11,9 @@ from IO import Window
 # change log groupings
 gameplay = []
 graphics = []
-content = []
+content = [
+    InfoText("Added artifacts to ohio! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/55]PR\[#55][\link] by CarlBla123")
+]
 online = []
 code_structure = []
 testing = []
