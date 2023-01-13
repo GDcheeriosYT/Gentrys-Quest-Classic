@@ -11,7 +11,7 @@ class WintonOverwatAmulet(Artifact):
             "A Winton Overwat Amulet",
             star_rating,
             "Ohio",
-            Buff(StatTypes.Damage)
+            Buff(StatTypes.Attack)
         )
 
 class AmongUsGlasses(Artifact):

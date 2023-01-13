@@ -21,3 +21,4 @@ import Content.Artifacts.MaxShrum
 import Content.Artifacts.NathanTenney
 import Content.Artifacts.NolanAnderson
 import Content.Artifacts.SpencerGeorge
+import Content.Artifacts.Ohio
