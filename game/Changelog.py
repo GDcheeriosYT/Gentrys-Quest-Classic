@@ -9,35 +9,14 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Added Changelog! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/35]PR\[#35][/link] by GDcheerios"),
-    InfoText("Reworked scaling! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/44]PR\[#44][/link] by GDcheerios"),
-    InfoText("Added credits! by GDcheerios"),
-    InfoText("Changed Gacha to give duplicate weapons rather than upgrading weapons! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
-    InfoText("Added multiple selection of items when upgrading weapon or artifacts! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
-    InfoText("Added visualization of item after leveling up! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
-    InfoText("Reworked Inventory Functions! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/47]PR\[#47][/link] by GDcheerios"),
-    InfoText("Added display of what character you have equipped when in travel menu! by GDcheerios")
-]
+gameplay = []
 graphics = []
 content = [
-    InfoText("Added Nigeria location! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/41]PR\[#41][/link] by GDcheerios"),
-    InfoText("Added content to Brayden's House by GDcheerios"),
-    InfoText("Added Ohio location! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/42]PR\[#42][/link] by CarlBla123"),
-    InfoText("Added China location! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/42]PR\[#42][/link] by CarlBla123"),
-    InfoText("Added Nigeria location! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/41]PR\[#41][/link] by GDcheerios"),
-    InfoText("Added content to Brayden's House! by GDcheerios"),
-    InfoText("Added Gentry's House location! by GDcheerios")
+    InfoText("Added artifacts to ohio! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/55]PR\[#55][\link] by CarlBla123")
 ]
-online = [
-    InfoText("Added online features! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/49]PR\[#49][/link] by GDcheerios")
-]
-code_structure = [
-    InfoText("Changed enemy initialization in battle area to use deepcopy()! by GDcheerios")
-]
-testing = [
-    InfoText("Added Changelog View Testing! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/35]PR\[#35][/link] by GDcheerios")
-]
+online = []
+code_structure = []
+testing = []
 
 
 def display_changelog(version: str):
