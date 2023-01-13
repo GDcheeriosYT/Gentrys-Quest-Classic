@@ -11,9 +11,7 @@ from IO import Window
 # change log groupings
 gameplay = []
 graphics = []
-content = [
-    InfoText("Added Gentry's Quest Story! by GDcheerios")
-]
+content = []
 online = []
 code_structure = []
 testing = []
