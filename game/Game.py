@@ -13,7 +13,7 @@ from Content.Stories.Intro import Intro
 from Content.Gachas.ValleyHighSchool import ValleyHighSchool
 from Content.Gachas.BaseGacha import BaseGacha
 from Content.CharacterContentManager import CharacterContentManager
-from Content.Stories.GentrysQuest import GentrysQuest
+#from Content.Stories.GentrysQuest import GentrysQuest
 
 # collection packages
 from Collection.ItemList import ItemList
@@ -42,6 +42,9 @@ from Online.Server import Server
 # built-in packages
 import time
 
+# content packages
+from Content.Stories.GentrysQuest import GentrysQuest
+
 
 class Game:
     def __init__(self, game_data, version, server):
@@ -50,6 +53,8 @@ class Game:
         self.server: Server = server
         self.equipped_character = None
         self.locations = ItemList(content_type=Location)
+        self.story = GentrysQuest()
+        self.story_index = 0
 
     def start_intro(self, character_name):
         intro_scene = Intro()
@@ -122,7 +127,9 @@ class Game:
                                                    "5. Back")
 
                                 if choices2 == 1:
-                                    self.game_data
+                                    InfoText("Coming soon...").display()
+                                    enter_to_continue()
+                                    #self.story.start(self.equipped_character, self.game_data.inventory, self.game_data.content, self.story_index)
 
                                 elif choices2 == 2:
                                     while True:
