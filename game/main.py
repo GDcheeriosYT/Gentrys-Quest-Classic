@@ -36,7 +36,7 @@ import argparse
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V2.0.0-Beta"
+version = "V1.0.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",

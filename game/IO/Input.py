@@ -56,8 +56,12 @@ def get_range(text: str = "text", pre_input=None):
                 return ranges
             else:
                 print(f"Provide input like so:\n{random.randint(1, 25)}-{random.randint(26, 50)}")
+                enter_to_continue()
+                break
         except TypeError:
             print(f"Provide input like so:\n{random.randint(1, 25)}-{random.randint(26, 50)}")
+            enter_to_continue()
+            break
 
 
 def get_range_or_int(text: str = "text"):
