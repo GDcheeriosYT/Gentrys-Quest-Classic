@@ -77,7 +77,8 @@ class API:
         leaderboard.sort(key=sort_thing)
         return leaderboard
 
-
     def check_out(self):
         requests.post(f"{self.url}/api/gq/check-out/{self.id}")
 
+    def get_version(self):
+        return requests.get(f"{self.url}/api/gq/get-version").text

@@ -244,35 +244,38 @@ class Game:
                     enter_to_continue()
 
                 elif choices == 4:
-                    choices2 = get_int("1. Online Users\n"
-                                       "2. Leaderboard\n"
-                                       "3. Back")
+                    if not self.server.disabled:
+                        choices2 = get_int("1. Online Users\n"
+                                           "2. Leaderboard\n"
+                                           "3. Back")
 
-                    if choices2 == 1:
-                        Window.place_rule("Online Users")
-                        online_status = Status("Uploading data..")
-                        online_status.start()
-                        self.server.API.upload_data(self.game_data)
-                        online_status.stop()
-                        online_status.modify_status("fetching online users...")
-                        online_status.start()
-                        players = ItemList(content=self.server.API.get_online_players())
-                        online_status.stop()
-                        players.list_content(False)
-                        enter_to_continue()
+                        if choices2 == 1:
+                            Window.place_rule("Online Users")
+                            online_status = Status("Uploading data..")
+                            online_status.start()
+                            self.server.API.upload_data(self.game_data)
+                            online_status.stop()
+                            online_status.modify_status("fetching online users...")
+                            online_status.start()
+                            players = ItemList(content=self.server.API.get_online_players())
+                            online_status.stop()
+                            players.list_content(False)
+                            enter_to_continue()
 
-                    elif choices2 == 2:
-                        Window.place_rule("Gentry's Quest Leaderboard")
-                        online_status = Status("Uploading data..")
-                        online_status.start()
-                        self.server.API.upload_data(self.game_data)
-                        online_status.stop()
-                        online_status.modify_status("fetching leaderboard data...")
-                        online_status.start()
-                        players = ItemList(content=self.server.API.get_leaderboard())
-                        online_status.stop()
-                        players.list_content(False)
-                        enter_to_continue()
+                        elif choices2 == 2:
+                            Window.place_rule("Gentry's Quest Leaderboard")
+                            online_status = Status("Uploading data..")
+                            online_status.start()
+                            self.server.API.upload_data(self.game_data)
+                            online_status.stop()
+                            online_status.modify_status("fetching leaderboard data...")
+                            online_status.start()
+                            players = ItemList(content=self.server.API.get_leaderboard())
+                            online_status.stop()
+                            players.list_content(False)
+                            enter_to_continue()
+                    else:
+                        WarningText("Your server functions are disabled try checking your version...").display()
 
                 elif choices == 5:
                     display_changelog(self.version)

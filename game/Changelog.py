@@ -11,10 +11,10 @@ from IO import Window
 # change log groupings
 gameplay = []
 graphics = []
-content = [
-    InfoText("Added artifacts to ohio! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/55]PR\[#55][\link] by CarlBla123")
+content = []
+online = [
+    InfoText("Check game version on startup by GDcheerios")
 ]
-online = []
 code_structure = []
 testing = []
 

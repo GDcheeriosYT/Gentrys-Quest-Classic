@@ -13,9 +13,11 @@ from Graphics.Status import Status
 class Server:
     url = None
     API = None
+    disabled = None
 
     def __init__(self, url="https://gdcheerios.com"):
         self.url = url
+        self.disabled = False
         server_status = Status("connecting to server", "point")
         try:
             server_status.start()
@@ -26,3 +28,8 @@ class Server:
             exit(1)
         server_status.stop()
         self.API = API(Token(url), self.url)
+
+    def disable(self):
+        self.url = None
+        self.API = None
+        self.disabled = True
