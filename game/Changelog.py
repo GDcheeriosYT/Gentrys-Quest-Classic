@@ -9,18 +9,14 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Added Changelog! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/35]PR\[#35][/link]")
-]
+gameplay = []
 graphics = []
 content = [
-    InfoText("Added Karl Goldsmith character!(Valley Character)")
+    InfoText("Added Karl Goldsmith character!(Valley Character) [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/38]PR\[#38][/link]")
 ]
 online = []
 code_structure = []
-testing = [
-    InfoText("Added Changelog View Testing! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/35]PR\[#35][/link]")
-]
+testing = []
 
 
 def display_changelog():
