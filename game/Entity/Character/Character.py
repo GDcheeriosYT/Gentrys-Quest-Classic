@@ -8,6 +8,7 @@ from ..Stats.Experience import Experience
 from ..Artifact.Artifact import Artifact
 from ..Enemy.Enemy import Enemy
 from ..Stats.Stat import Stat
+from .SkillSet import SkillSet
 
 # collection packages
 from Collection.ItemList import ItemList
@@ -122,7 +123,8 @@ class Character(Entity):
             ClassSetting("weapon", self.weapon),
             ClassSetting("artifacts", self.artifacts),
             StringSetting("description", self.description)
-        ]
+        ],
+        self.skills = SkillSet(self.star_rating.value)
 
     def test(self):
         Window.clear()
@@ -146,6 +148,9 @@ class Character(Entity):
         options = []
         if self.weapon is not None:
             options.append("attack")
+
+        if not self.skills.is_empty():
+            options.append("skills")
 
         return options
 
