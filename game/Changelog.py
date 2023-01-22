@@ -9,7 +9,9 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = ["Added Skills by GDcheerios"]
+gameplay = [
+    InfoText("Added Skills by GDcheerios")
+]
 graphics = []
 content = []
 online = [

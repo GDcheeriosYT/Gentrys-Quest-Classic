@@ -28,7 +28,7 @@ from Graphics.Text.Text import Text
 
 # content packages
 from Content.Effects.Burn import Burn
-
+from Content.ContentManager import ContentManager
 
 class BattleAreaTestInterface:
     def __init__(self):
@@ -69,7 +69,7 @@ class BattleAreaTestInterface:
 
         if choice == 1:
             self.character.update_stats()
-            self.battle_area.start(self.character, self.inventory)
+            self.battle_area.start(self.character, self.inventory, ContentManager())
 
         elif choice == 2:
             while True:

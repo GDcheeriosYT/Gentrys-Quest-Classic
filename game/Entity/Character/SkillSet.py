@@ -15,3 +15,10 @@ class SkillSet:
 
     def is_empty(self):
         return self.skills.get_length() == 0
+
+    def __repr__(self):
+        string = ""
+        for skill in self.skills.content:
+            string += f"{skill}\n"
+
+        return string

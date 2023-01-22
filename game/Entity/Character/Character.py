@@ -8,6 +8,7 @@ from ..Stats.Experience import Experience
 from ..Artifact.Artifact import Artifact
 from ..Enemy.Enemy import Enemy
 from ..Stats.Stat import Stat
+from .Skill import Skill
 from .SkillSet import SkillSet
 
 # collection packages
@@ -27,6 +28,7 @@ from Config.SettingManager import SettingManager
 from Config.StringSetting import StringSetting
 from Config.NumberSetting import NumberSetting
 from Config.ClassSetting import ClassSetting
+from Config.ToggleSetting import ToggleSetting
 
 # random packages
 from Random.Functions import determine_crit
@@ -122,11 +124,13 @@ class Character(Entity):
             NumberSetting("level", self.experience.level, 1),
             ClassSetting("weapon", self.weapon),
             ClassSetting("artifacts", self.artifacts),
-            StringSetting("description", self.description)
+            StringSetting("description", self.description),
+            ToggleSetting("has test skill", False)
         ],
         self.skills = SkillSet(self.star_rating.value)
 
     def test(self):
+        skill = Skill("Test Skill", "does 50% more damage")
         Window.clear()
         Text(self.__repr__()).display()
         self.settings = SettingManager(self.settings).config_settings()
@@ -141,6 +145,10 @@ class Character(Entity):
         self.weapon = self.settings[8].instance_class
         self.artifacts = self.settings[9].instance_class
         self.description = self.settings[10].text
+        if self.settings[11].toggled:
+            self.skills.add_skill(skill)
+        else:
+            self.skills.skills.content = []
         self.update_stats()
         return self
 
@@ -359,7 +367,8 @@ xp: {self.experience.xp} / {self.experience.get_xp_required(self.star_rating.val
 
 ^^^^^^^^artifact^^^^^^^^
 {self.artifacts.get(4)}
-
+ 
+{f"{self.skills}" if not self.skills.is_empty() else ''}
 ====================
 {DescriptionText(self.description).raw_output()}
 ====================
