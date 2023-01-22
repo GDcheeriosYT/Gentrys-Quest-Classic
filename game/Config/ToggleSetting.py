@@ -19,10 +19,7 @@ class ToggleSetting(Setting):
         self.toggled = toggled
 
     def toggle_setting(self):
-        if self.toggled:
-            self.toggled = False
-        else:
-            self.toggled = True
+        self.toggled = not self.toggled
 
     def __repr__(self):
         return f"{self.name} [{self.toggled}]"
