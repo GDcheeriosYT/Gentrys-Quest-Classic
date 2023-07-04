@@ -9,13 +9,14 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Added Skills by GDcheerios")
-]
+gameplay = []
 graphics = []
-content = []
+content = [
+    InfoText("Added Family Info Viewer by GDcheerios")
+]
 online = [
-    InfoText("Check game version on startup by GDcheerios")
+    InfoText("Check game version on startup by GDcheerios"),
+    InfoText("Updated leaderboard to use GPSystem by GDcheerios")
 ]
 code_structure = []
 testing = []
@@ -53,5 +54,7 @@ def display_changelog(version: str):
         Window.place_rule("Testing")
         for testing_change in testing:
             testing_change.display()
+
+    print("\n")
 
     enter_to_continue()

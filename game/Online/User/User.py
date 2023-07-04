@@ -28,4 +28,4 @@ class User:
         self.ranking = "unranked"
 
     def __repr__(self):
-        return f"#{self.ranking} {self.username} {self.powerlevel}p"
+        return f"#{self.ranking} {self.username} {self.powerlevel}gp"

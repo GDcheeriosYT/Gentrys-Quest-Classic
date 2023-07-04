@@ -16,12 +16,18 @@ from ..Handlers.ArtifactObjectHandler import ArtifactObjectHandler
 from Graphics.Status import Status
 from Graphics.Text.Text import Text
 
+# content packages
+from Content.ContentManager import ContentManager
+
 # IO packages
 from IO.Input import get_int
 
 # built-in packages
 import time
 
+# vars
+
+content = ContentManager()
 
 class CharacterList:
     """
@@ -39,6 +45,10 @@ class CharacterList:
         load_data_status.start()
         self.characters = []
         for character in characters:
+            character_check_result = content.check_character(character["name"], character["description"])
+            if character_check_result is not None:
+                character = character_check_result()
+
             artifact_list = ItemList(5, Artifact, True)
             experience = character["experience"]
             equips = character["equips"]

@@ -52,7 +52,7 @@ class API:
         player_list: dict = requests.get(f"{self.url}/api/gq/get-online-players").json()
         online_players = []
         for id in player_list.keys():
-            user = User(int(id), player_list[id]["username"], player_list[id]["power level"])
+            user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
             user.ranking = player_list[id]["ranking"]
             online_players.append(user)
 
@@ -67,7 +67,7 @@ class API:
         leaderboard = []
 
         for id in player_list.keys():
-            user = User(int(id), player_list[id]["username"], player_list[id]["power level"])
+            user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
             user.ranking = player_list[id]["ranking"]
             leaderboard.append(user)
 

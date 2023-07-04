@@ -124,7 +124,8 @@ class Game:
                                                    "2. Travel\n"
                                                    "3. Gacha\n"
                                                    "4. Inventory\n"
-                                                   "5. Back")
+                                                   "5. View Families\n"
+                                                   "6. Back")
 
                                 if choices2 == 1:
                                     InfoText("Coming soon...").display()
@@ -173,6 +174,9 @@ class Game:
                                     inventory_results = self.game_data.inventory.manage_input(self.equipped_character)
                                     if inventory_results is not None:
                                         self.equipped_character = inventory_results
+
+                                elif choices2 == 5:
+                                    self.game_data.content.display_artifact_families()
 
                                 else:
                                     break

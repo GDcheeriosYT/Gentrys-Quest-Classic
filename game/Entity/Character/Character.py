@@ -126,11 +126,28 @@ class Character(Entity):
             ClassSetting("artifacts", self.artifacts),
             StringSetting("description", self.description),
             ToggleSetting("has test skill", False)
-        ],
+        ]
         self.skills = SkillSet(self.star_rating.value)
 
     def test(self):
-        skill = Skill("Test Skill", "does 50% more damage")
+        class TestSkill(Skill):
+            def __init__(self):
+                super().__init__(
+                    "Test Skill",
+                    "hits the enemy for 50% more damage",
+                    2
+                )
+
+            def do_stuff(self):
+                if self.is_ready():
+                    self.tracker = 0
+                    damage = 0
+                    damage += self.character.attack + self.character.weapon.attack + (self.character.attack / 2)
+                    Text(f"You hit the enemy for [red] {damage}").display()
+                    return damage
+                else:
+                    return 0
+
         Window.clear()
         Text(self.__repr__()).display()
         self.settings = SettingManager(self.settings).config_settings()
@@ -146,7 +163,9 @@ class Character(Entity):
         self.artifacts = self.settings[9].instance_class
         self.description = self.settings[10].text
         if self.settings[11].toggled:
-            self.skills.add_skill(skill)
+            skill = TestSkill()
+
+            self.skills.add_skill(TestSkill())
         else:
             self.skills.skills.content = []
         self.update_stats()
@@ -193,14 +212,33 @@ class Character(Entity):
         enter_to_continue()
 
     def manage_battle_input(self, choice, enemy, choices):
-        try:
-            if choices[choice - 1] == "attack":
-                self.attack_enemy(enemy)
-                return True
-            else:
+        while True:
+            Text(enemy.show_stats()).display()
+            try:
+                if choices[choice - 1] == "attack":
+                    self.attack_enemy(enemy)
+                    return True
+
+                elif choices[choice - 1] == "skills":
+                    x = 1
+                    for skill in self.skills.skills.content:
+                        Text(f"{x}. {skill}").display()
+                        x += 1
+
+                    option = get_int(f"{x}. back")
+                    if option < x:
+                        selection = self.skills.skills.content[option - 1]
+                        if selection.is_ready():
+                            selection.do_stuff()
+                        else:
+                            WarningText(f"{selection.name} is not ready yet!").display()
+
+
+
+                else:
+                    return False
+            except IndexError:
                 return False
-        except IndexError:
-            return False
 
     def update_stats(self):
         def calculate(variable, multiplier=1):
@@ -367,8 +405,9 @@ xp: {self.experience.xp} / {self.experience.get_xp_required(self.star_rating.val
 
 ^^^^^^^^artifact^^^^^^^^
 {self.artifacts.get(4)}
- 
-{f"{self.skills}" if not self.skills.is_empty() else ''}
+
+skills: 
+{f"{self.skills}" if not self.skills.is_empty() else 'This character has no skills...'}
 ====================
 {DescriptionText(self.description).raw_output()}
 ====================

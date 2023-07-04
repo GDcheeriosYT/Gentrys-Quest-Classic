@@ -12,6 +12,6 @@ class Shrpe(Character):
             StarRating(5),
             None,
             None,
-            default_health_points=1,
+            default_crit_rate_points=1,
             default_attack_points=3
         )

@@ -19,6 +19,6 @@ class SkillSet:
     def __repr__(self):
         string = ""
         for skill in self.skills.content:
-            string += f"{skill}\n"
+            string += f"{skill.text_output()}\n"
 
         return string

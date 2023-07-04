@@ -3,10 +3,15 @@
 from Entity.Stats.StarRating import StarRating
 from Entity.Artifact.Artifact import Artifact
 
+# content packages
+from Content.ContentManager import ContentManager
+
 # collection packages
 from .BuffArrayHandler import BuffArrayHandler
 from .ExperienceObjectHandler import ExperienceObjectHandler
 
+# vars
+content = ContentManager()
 
 class ArtifactObjectHandler:
     """
@@ -29,7 +34,8 @@ class ArtifactObjectHandler:
         attributes = []
         for buff in self.artifact_object["stats"]["attributes"]:
             attributes.append(BuffArrayHandler(buff["buff"]).create_buff())
-        return Artifact(
+
+        artifact = Artifact(
             name=self.artifact_object["name"],
             star_rating=StarRating(self.artifact_object["star rating"]),
             family=self.artifact_object["family"],
@@ -37,3 +43,9 @@ class ArtifactObjectHandler:
             attributes=attributes,
             experience=experience
         )
+
+        artifact_check_result = content.check_artifact(artifact)
+        if artifact_check_result is not None:
+            artifact = artifact_check_result()
+
+        return artifact
