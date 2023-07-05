@@ -8,6 +8,9 @@ from ..User.User import User
 from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Content.Text.InfoText import InfoText
 
+# io game packages
+from IO import Window
+
 # external packages
 import time
 import requests
@@ -63,7 +66,7 @@ class API:
         return online_players
 
     def get_leaderboard(self):
-        player_list: dict = requests.get(f"{self.url}/api/gq/get-leaderboard/0+10").json()
+        player_list: dict = requests.get(f"{self.url}/api/gq/get-leaderboard/0+{int(Window.console.height - 3)}").json()
         leaderboard = []
 
         for id in player_list.keys():
