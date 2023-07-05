@@ -2,15 +2,13 @@
 import json
 import time
 
-# game packages
-from Collection.Inventory.Inventory import Inventory
-
 # graphics packages
 from Graphics.Status import Status
 
 # content packages
 from Content.Settings.GameSettings import GameSettings
 from Content.ContentManager import ContentManager
+from Collection.Inventory.Inventory import Inventory
 
 # config packages
 from Config.StringSetting import StringSetting
@@ -36,7 +34,7 @@ class GameData:
     def __init__(self, json_data):
         game_settings = GameSettings().settings
         self.content = ContentManager()
-        if json_data == None:
+        if json_data is None:
             data = {
                 "startupamount": 0,
                 "settings": {},

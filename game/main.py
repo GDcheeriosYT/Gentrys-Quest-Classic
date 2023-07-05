@@ -25,9 +25,6 @@ from IO import Window
 from IO.Input import enter_to_continue
 
 # built-in packages
-import sys
-import time
-import os
 import atexit
 
 # external packages
@@ -37,7 +34,7 @@ import argparse
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.1.0"
+version = "V1.2.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -89,6 +86,7 @@ else:
             enter_to_continue()
             server.API.check_out()
             server.disable()
+
         def byebye():
             game_status = Status("Uploading data...")
             game_status.start()

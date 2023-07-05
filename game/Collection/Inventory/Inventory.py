@@ -19,6 +19,9 @@ from Entity.Weapon.Weapon import Weapon
 # built-in packages
 from copy import deepcopy
 
+# external packages
+from GPSystem.GPmain import GPSystem
+
 
 class Inventory:
     """
@@ -331,13 +334,28 @@ class Inventory:
             "money": self.money
         }
 
+    def format_length(self, number):
+        if number >= 1000:
+            return f"{int(number / 1000)}k"
+        return number
+
     def __repr__(self):
+        rating_details = GPSystem.rater.generate_power_details(
+            {'inventory': self.jsonify()}
+        )
+
+        overall_gp = rating_details['rating']
+        character_gp = rating_details['totals']['characters']
+        weapon_gp = rating_details['totals']['weapons']
+        artifact_gp = rating_details['totals']['artifacts']
         return (
             f"""
+{overall_gp["weighted"]}|{overall_gp["unweighted"]}gp\t V{GPSystem.version}
+
 ${self.money}
-1. characters {self.character_list.get_length()}
-2. weapons {self.weapon_list.get_length()}
-3. artifacts {self.artifact_list.get_length()}
+1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
+2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
+3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
 4. back
 """
         )
