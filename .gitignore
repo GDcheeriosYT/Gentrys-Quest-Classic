@@ -1,3 +1,7 @@
 
 *.pyc
-build/
+/build/
+*.spec
+*.exe
+/dist/
+/dist/Gentrys Quest.exe
