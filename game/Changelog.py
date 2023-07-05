@@ -9,16 +9,19 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = []
+gameplay = [
+    InfoText("Changed character pull rates in gacha by GDcheerios"),
+    InfoText("Added GP display to inventory by GDcheerios")
+]
 graphics = []
-content = [
-    InfoText("Added Family Info Viewer by GDcheerios")
-]
+content = []
 online = [
-    InfoText("Check game version on startup by GDcheerios"),
-    InfoText("Updated leaderboard to use GPSystem by GDcheerios")
+    InfoText("Changed leaderboard user display amount to match height of window by GDcheerios")
 ]
-code_structure = []
+code_structure = [
+    InfoText("Updated required libraries by GDcheerios"),
+    InfoText("Made game class static by GDcheerios")
+]
 testing = []
 
 
