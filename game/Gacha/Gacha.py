@@ -122,16 +122,16 @@ class Gacha:
         entity_pool = []
         random_value = random.randint(0, 10000)
         star_rating = 1
-        if random_value <= 25:
+        if random_value <= 100:
             star_rating = 5
 
-        elif random_value <= 250:
+        elif random_value <= 500:
             star_rating = 4
 
-        elif random_value <= 750:
+        elif random_value <= 1000:
             star_rating = 3
 
-        elif random_value <= 2500:
+        elif random_value <= 5000:
             star_rating = 2
 
         for entity in entity_list:
