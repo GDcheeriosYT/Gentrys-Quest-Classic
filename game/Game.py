@@ -47,20 +47,28 @@ from Content.Stories.GentrysQuest import GentrysQuest
 
 
 class Game:
-    def __init__(self, game_data, version, server):
-        self.game_data = game_data
-        self.version = version
-        self.server: Server = server
-        self.equipped_character = None
-        self.locations = ItemList(content_type=Location)
-        self.story = GentrysQuest()
-        self.story_index = 0
+    game_data = None
+    version = None
+    server = None
+    equipped_character = None
+    locations = None
+    story = None
+    story_index = None
+    
+    def __init__(Game, game_data, version, server):
+        Game.game_data = game_data
+        Game.version = version
+        Game.server: Server = server
+        Game.equipped_character = None
+        Game.locations = ItemList(content_type=Location)
+        Game.story = GentrysQuest()
+        Game.story_index = 0
 
-    def start_intro(self, character_name):
+    def start_intro(Game, character_name):
         intro_scene = Intro()
         Window.clear()
-        characters = self.game_data.content.characters
-        self.equipped_character = None
+        characters = Game.game_data.content.characters
+        Game.equipped_character = None
         if character_name is not None:
             for character in characters:
                 try:
@@ -68,13 +76,13 @@ class Game:
                     if character.name == character_name:
                         Text("Thanks for contributing to Gentry's Quest!\nAs a gift take this:").display()
                         Text(character.list_view()).display()
-                        self.equipped_character = character
+                        Game.equipped_character = character
                         enter_to_continue()
                         break
                 except TypeError:
                     pass
 
-            if self.equipped_character is None:
+            if Game.equipped_character is None:
                 WarningText("We couldn't find this character...").display()
                 exit(1)
 
@@ -89,20 +97,20 @@ class Game:
                 default_crit_damage_points=1,
                 default_crit_rate_points=1
             )
-            self.equipped_character = character
+            Game.equipped_character = character
 
-        self.equipped_character.weapon = Weapon()
-        self.game_data.inventory.character_list.add(character)
+        Game.equipped_character.weapon = Weapon()
+        Game.game_data.inventory.character_list.add(character)
         time.sleep(1)
-        intro_scene.start(self.equipped_character, self.game_data.inventory, self.game_data.content)
-        character.weapon = self.game_data.inventory.weapon_list.content[0]
-        self.game_data.inventory.weapon_list.content.pop(0)
+        intro_scene.start(Game.equipped_character, Game.game_data.inventory, Game.game_data.content)
+        character.weapon = Game.game_data.inventory.weapon_list.content[0]
+        Game.game_data.inventory.weapon_list.content.pop(0)
 
-    def start(self, character_arg):
-        if self.game_data.startup_amount < 1:
-            self.start_intro(character_arg)
+    def start(Game, character_arg):
+        if Game.game_data.startup_amount < 1:
+            Game.start_intro(character_arg)
 
-        self.game_data.startup_amount += 1
+        Game.game_data.startup_amount += 1
         in_game = True
         while in_game:
             try:
@@ -130,17 +138,17 @@ class Game:
                                 if choices2 == 1:
                                     InfoText("Coming soon...").display()
                                     enter_to_continue()
-                                    #self.story.start(self.equipped_character, self.game_data.inventory, self.game_data.content, self.story_index)
+                                    #Game.story.start(Game.equipped_character, Game.game_data.inventory, Game.game_data.content, Game.story_index)
 
                                 elif choices2 == 2:
                                     while True:
-                                        if self.equipped_character is None:
+                                        if Game.equipped_character is None:
                                             character = "nobody"
                                         else:
-                                            character = self.equipped_character.list_view()
+                                            character = Game.equipped_character.list_view()
 
                                         Text(f"you currently have {character} equipped").display()
-                                        locations = self.game_data.content.locations
+                                        locations = Game.game_data.content.locations
                                         for location in locations:
                                             Text(f"{locations.index(location) + 1}. {location}").display()
                                         choices3 = get_int(f"{len(locations) + 1}. back")
@@ -150,7 +158,7 @@ class Game:
                                                 location = locations[choices3 - 1]
                                                 Text(f"you currently have {character} equipped").display()
                                                 location.list_areas()
-                                                location.select_area(self.equipped_character, self.game_data.inventory, self.game_data.content)
+                                                location.select_area(Game.equipped_character, Game.game_data.inventory, Game.game_data.content)
                                             except IndexError:
                                                 pass
 
@@ -165,18 +173,18 @@ class Game:
                                     choices3 = get_int("3. back")
 
                                     if choices3 == 1:
-                                        valley_high_school.manage_input(self.game_data.inventory)
+                                        valley_high_school.manage_input(Game.game_data.inventory)
 
                                     elif choices3 == 2:
-                                        base_gacha.manage_input(self.game_data.inventory)
+                                        base_gacha.manage_input(Game.game_data.inventory)
 
                                 elif choices2 == 4:
-                                    inventory_results = self.game_data.inventory.manage_input(self.equipped_character)
+                                    inventory_results = Game.game_data.inventory.manage_input(Game.equipped_character)
                                     if inventory_results is not None:
-                                        self.equipped_character = inventory_results
+                                        Game.equipped_character = inventory_results
 
                                 elif choices2 == 5:
-                                    self.game_data.content.display_artifact_families()
+                                    Game.game_data.content.display_artifact_families()
 
                                 else:
                                     break
@@ -187,7 +195,7 @@ class Game:
                 elif choices == 2:
                     Window.clear()
                     try:
-                        self.game_data.settings = SettingsInterface(self.game_data).visit()
+                        Game.game_data.settings = SettingsInterface(Game.game_data).visit()
                     except TypeError:
                         Window.clear()
 
@@ -248,7 +256,7 @@ class Game:
                     enter_to_continue()
 
                 elif choices == 4:
-                    if not self.server.disabled:
+                    if not Game.server.disabled:
                         choices2 = get_int("1. Online Users\n"
                                            "2. Leaderboard\n"
                                            "3. Back")
@@ -257,11 +265,11 @@ class Game:
                             Window.place_rule("Online Users")
                             online_status = Status("Uploading data..")
                             online_status.start()
-                            self.server.API.upload_data(self.game_data)
+                            Game.server.API.upload_data(Game.game_data)
                             online_status.stop()
                             online_status.modify_status("fetching online users...")
                             online_status.start()
-                            players = ItemList(content=self.server.API.get_online_players())
+                            players = ItemList(content=Game.server.API.get_online_players())
                             online_status.stop()
                             players.list_content(False)
                             enter_to_continue()
@@ -270,11 +278,11 @@ class Game:
                             Window.place_rule("Gentry's Quest Leaderboard")
                             online_status = Status("Uploading data..")
                             online_status.start()
-                            self.server.API.upload_data(self.game_data)
+                            Game.server.API.upload_data(Game.game_data)
                             online_status.stop()
                             online_status.modify_status("fetching leaderboard data...")
                             online_status.start()
-                            players = ItemList(content=self.server.API.get_leaderboard())
+                            players = ItemList(content=Game.server.API.get_leaderboard())
                             online_status.stop()
                             players.list_content(False)
                             enter_to_continue()
@@ -282,7 +290,7 @@ class Game:
                         WarningText("Your server functions are disabled try checking your version...").display()
 
                 elif choices == 5:
-                    display_changelog(self.version)
+                    display_changelog(Game.version)
 
                 elif choices == 6:
                     in_game = False
