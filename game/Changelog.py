@@ -10,7 +10,7 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Removed unweighted gp from weapons and artifacts by GDcheerios")
+    InfoText("Improved artifacts and buffs by GDcheerios")
 ]
 graphics = []
 content = []
