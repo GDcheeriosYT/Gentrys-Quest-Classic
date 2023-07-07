@@ -80,6 +80,9 @@ class Artifact(Entity):
             ClassSetting("main attribute", self.main_attribute),
             NumberSetting("level", self.experience.level, 1, self.experience.limit)
         ]
+        if self.star_rating.value - 2 >= 1:
+            for i in range(self.star_rating.value - 2):
+                self.add_new_attribute()
 
     def level_up(self, amount):
         if self.experience.level < self.star_rating.value * 4:

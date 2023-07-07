@@ -52,13 +52,13 @@ class Buff:
         else:
             self.experience = experience
 
-        if is_percent is None:
-            self.is_percent = random.choice([True, False])
-        else:
-            self.is_percent = is_percent
-
-        if attribute_type == StatTypes.CritRate or attribute_type == StatTypes.CritDamage:
+        if self.attribute_type == StatTypes.CritRate or self.attribute_type == StatTypes.CritDamage:
             self.is_percent = False
+        else:
+            if is_percent is None:
+                self.is_percent = random.choice([True, False])
+            else:
+                self.is_percent = is_percent
 
         stats = []
         for stat in list(StatTypes):
@@ -74,7 +74,9 @@ class Buff:
         calculation = ((self.experience.level * 1.75) + (star_rating * 1.25) + (star_rating * int(self.experience.level / star_rating)))
         if self.attribute_type == StatTypes.CritRate:
             calculation /= 4
-        self.value = int(calculation) if not self.is_percent else float(calculation)
+        elif self.attribute_type == StatTypes.CritDamage:
+            calculation /= 2.5
+        self.value = int(calculation * (1 if self.attribute_type == StatTypes.CritRate else 4)) if not self.is_percent else float(calculation)
 
     def __repr__(self):
         return f"{self.attribute_type.name} {self.value}{'%' if self.is_percent else ''}"
