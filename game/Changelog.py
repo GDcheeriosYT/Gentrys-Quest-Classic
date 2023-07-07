@@ -10,18 +10,12 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Changed character pull rates in gacha by GDcheerios"),
-    InfoText("Added GP display to inventory by GDcheerios")
+    InfoText("Removed unweighted gp from weapons and artifacts by GDcheerios")
 ]
 graphics = []
 content = []
-online = [
-    InfoText("Changed leaderboard user display amount to match height of window by GDcheerios")
-]
-code_structure = [
-    InfoText("Updated required libraries by GDcheerios"),
-    InfoText("Made game class static by GDcheerios")
-]
+online = []
+code_structure = []
 testing = []
 
 

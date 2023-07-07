@@ -354,8 +354,8 @@ class Inventory:
 
 ${self.money}
 1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
-2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
-3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
+2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}gp
+3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}gp
 4. back
 """
         )
