@@ -14,7 +14,9 @@ gameplay = [
 ]
 graphics = []
 content = []
-online = []
+online = [
+    InfoText("Added discord rich presence by GDcheerios")
+]
 code_structure = []
 testing = []
 
