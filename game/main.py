@@ -90,6 +90,7 @@ else:
         def byebye():
             game_status = Status("Uploading data...")
             game_status.start()
+            game.presence.end()
             if not server.disabled:
                 server.API.upload_data(game.game_data)
                 server.API.check_out()

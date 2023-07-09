@@ -38,6 +38,7 @@ from Graphics.Status import Status
 
 # online packages
 from Online.Server import Server
+from Online.API.Presence.Presence import GamePresence
 
 # built-in packages
 import time
@@ -63,8 +64,10 @@ class Game:
         Game.locations = ItemList(content_type=Location)
         Game.story = GentrysQuest()
         Game.story_index = 0
+        Game.presence = GamePresence()
 
     def start_intro(Game, character_name):
+        Game.presence.update_status("Playing intro")
         intro_scene = Intro()
         Window.clear()
         characters = Game.game_data.content.characters
@@ -123,6 +126,7 @@ class Game:
                                   "6. Quit")
 
                 if choices == 1:
+                    Game.presence.update_status("In menu")
                     while True:
                         choices1 = get_int("1. Singleplayer\n"
                                            "2. Back")
@@ -156,6 +160,7 @@ class Game:
                                         if choices3 != len(locations) + 1:
                                             try:
                                                 location = locations[choices3 - 1]
+                                                Game.presence.update_status("At location", location.name.content)
                                                 Text(f"you currently have {character} equipped").display()
                                                 location.list_areas()
                                                 location.select_area(Game.equipped_character, Game.game_data.inventory, Game.game_data.content)
@@ -166,6 +171,7 @@ class Game:
                                             break
 
                                 elif choices2 == 3:
+                                    Game.presence.update_status("gacha-ing")
                                     valley_high_school = ValleyHighSchool()
                                     base_gacha = BaseGacha()
                                     Text(f"1. {valley_high_school.name.raw_output()}\n"
@@ -179,11 +185,13 @@ class Game:
                                         base_gacha.manage_input(Game.game_data.inventory)
 
                                 elif choices2 == 4:
+                                    Game.presence.update_status("In inventory")
                                     inventory_results = Game.game_data.inventory.manage_input(Game.equipped_character)
                                     if inventory_results is not None:
                                         Game.equipped_character = inventory_results
 
                                 elif choices2 == 5:
+                                    Game.presence.update_status("Viewing artifact families")
                                     Game.game_data.content.display_artifact_families()
 
                                 else:
