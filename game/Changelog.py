@@ -10,13 +10,11 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Improved artifacts and buffs by GDcheerios")
+    InfoText("Fixed artifacts giving extra attributes on load by GDcheerios")
 ]
 graphics = []
 content = []
-online = [
-    InfoText("Added discord rich presence by GDcheerios")
-]
+online = []
 code_structure = []
 testing = []
 
