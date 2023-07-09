@@ -10,7 +10,8 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Fixed artifacts giving extra attributes on load by GDcheerios")
+    InfoText("Fixed artifacts again... by GDcheerios"),
+    InfoText("Artifact attribute types can no longer match main attribute by GDcheerios")
 ]
 graphics = []
 content = []

@@ -61,8 +61,12 @@ class Artifact(Entity):
     def __init__(self, name, star_rating=StarRating(), family=None, main_attribute=None, attributes=None,
                  experience=None, display_info=True):
         super().__init__(name=name, description="description", star_rating=star_rating, experience=experience)
+        buff_bonus_points = 0
         if attributes is None:
             attributes = []
+            if self.star_rating.value - 2 >= 1:
+                buff_bonus_points = self.star_rating.value - 2
+
         self.family = family
         if main_attribute is None:
             main_attribute = Buff()
@@ -80,10 +84,8 @@ class Artifact(Entity):
             ClassSetting("main attribute", self.main_attribute),
             NumberSetting("level", self.experience.level, 1, self.experience.limit)
         ]
-        if attributes is None:
-            if self.star_rating.value - 2 >= 1:
-                for i in range(self.star_rating.value - 2):
-                    self.add_new_attribute()
+        for i in range(buff_bonus_points):
+            self.add_new_attribute()
 
     def level_up(self, amount):
         if self.experience.level < self.star_rating.value * 4:
@@ -103,6 +105,9 @@ class Artifact(Entity):
 
     def add_new_attribute(self):
         new_attribute = Buff(experience=Experience(1))
+        while (new_attribute.attribute_type == self.main_attribute.attribute_type) and (new_attribute.is_percent == self.main_attribute.is_percent):
+            new_attribute = Buff(experience=Experience(1))
+
         if self.display_info:
             InfoText(f"^{new_attribute.attribute_type.name}{'%' if new_attribute.is_percent else ''}^").display()
         for attribute in self.attributes:
