@@ -156,7 +156,7 @@ class ItemList:
     def list_content(self, display_number: bool = True):
         for item in self.content:
             if hasattr(item, "list_view"):
-                item_string = item.list_view()
+                item_string = item.list_view(self.content.index(item))
             else:
                 item_string = item
             color = "[green on black]" if self.content.index(item) in self.selections else "[white on black]"

@@ -10,13 +10,15 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Fixed artifacts again... by GDcheerios"),
-    InfoText("Artifact attribute types can no longer match main attribute by GDcheerios")
+    InfoText("Updated display of entities in inventory by GDcheerios"),
+    InfoText("Added way to sort inventory by GDcheerios")
 ]
 graphics = []
 content = []
 online = []
-code_structure = []
+code_structure = [
+    InfoText("Added string method manager by GDcheerios")
+]
 testing = []
 
 

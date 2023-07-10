@@ -11,10 +11,15 @@ from Graphics.Text.Text import Text
 
 # IO packages
 from IO.Input import get_int
+from IO.Window import clear
 
 # entity packages
 from Entity.Artifact.Artifact import Artifact
 from Entity.Weapon.Weapon import Weapon
+
+# config packages
+from Config.ListSetting import ListSetting
+from Config.ToggleSetting import ToggleSetting
 
 # built-in packages
 from copy import deepcopy
@@ -54,6 +59,12 @@ class Inventory:
         self.character_list = CharacterList(inventory_data["characters"]).give_item_list()
         self.weapon_list = WeaponList(inventory_data["weapons"]).give_item_list()
         self.artifact_list = ArtifactList(inventory_data["artifacts"]).give_item_list()
+        self.sort_type = ListSetting("sort", "Star Rating", [
+            "Star Rating",
+            "Level",
+            "Name"
+        ])
+        self.reverse_sort = ToggleSetting("Reverse Sort", True)
 
     def upgrade(self):
         pass
@@ -80,12 +91,36 @@ class Inventory:
                 elif num == 3:
                     if is_not_empty(self.artifact_list.content, "artifact"):
                         self.manage_artifact(self.artifact_list.select(remove=False))
+                elif num == 4:
+                    self.sort_type.select()
+                    self.sort_things()
+                    clear()
+                elif num == 5:
+                    self.reverse_sort.toggle_setting()
+                    self.sort_things()
+                    clear()
                 else:
                     break
             except IndexError:
                 break
 
         return equipped_character
+
+    def sort_things(self):
+        if self.sort_type.selected_value == "Star Rating":
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
+
+        elif self.sort_type.selected_value == "Level":
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
+
+        else:
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
 
     def can_afford(self, amount):
         if self.money >= amount:
@@ -356,6 +391,9 @@ ${self.money}
 1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
 2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
 3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
-4. back
+
+4. sort type    {self.sort_type}
+5. reverse sort {self.reverse_sort}
+6. back
 """
         )

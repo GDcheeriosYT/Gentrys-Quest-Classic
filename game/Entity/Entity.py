@@ -10,6 +10,9 @@ from Graphics.Content.Text.WarningText import WarningText
 # collections packages
 from Collection.ItemList import ItemList
 
+# IO packages
+from IO.StringMethods import text_length_limiter, star_rating_spacer
+
 
 # external packages
 
@@ -89,8 +92,8 @@ class Entity:
         else:
             xp(amount)
 
-    def list_view(self):
-        return f"{self.name} {self.star_rating}"
+    def list_view(self, index: int):
+        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
 
     def gacha_info_view(self):
         return f"{self.name} {self.star_rating}"

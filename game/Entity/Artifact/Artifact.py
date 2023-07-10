@@ -24,6 +24,7 @@ from Config.SettingManager import SettingManager
 # IO packages
 from IO import Window
 from IO.Input import enter_to_continue
+from IO.StringMethods import text_length_limiter, star_rating_spacer
 
 
 class Artifact(Entity):
@@ -125,6 +126,23 @@ class Artifact(Entity):
             string += f"{attribute}\n"
 
         return string
+
+    def list_view(self, index: int):
+        attribute_text = f"*{self.main_attribute.attribute_type.abreviate()}{'%' if self.main_attribute.is_percent else ''}* "
+        for buff in self.attributes:
+            attribute_text += f"{buff.attribute_type.abreviate()}{'%' if buff.is_percent else ''} "
+        spacing_text = "      "
+
+        counter = len(attribute_text)
+
+        while counter < (8 * 4):
+            spacing_text += " "
+            counter += 1
+
+        try:
+            return f"{text_length_limiter(self.name, len(str(index + 1)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t  {attribute_text}{spacing_text}\t{self.experience}"
+        except TypeError:
+            return self.name
 
     def __repr__(self):
         try:
