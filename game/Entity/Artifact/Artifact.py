@@ -60,7 +60,7 @@ class Artifact(Entity):
     experience = None
 
     def __init__(self, name, star_rating=StarRating(), family=None, main_attribute=None, attributes=None,
-                 experience=None, display_info=True):
+                 experience=None):
         super().__init__(name=name, description="description", star_rating=star_rating, experience=experience)
         buff_bonus_points = 0
         if attributes is None:
@@ -77,7 +77,6 @@ class Artifact(Entity):
         for attribute in self.attributes:
             attribute.handle_value(self.star_rating.value)
         self.experience.limit = self.star_rating.value * 4
-        self.display_info = display_info
         self.settings = [
             StringSetting("name", self.name),
             NumberSetting("star rating", self.star_rating.value, 1, 5),
@@ -95,21 +94,19 @@ class Artifact(Entity):
             if self.display_info:
                 print(f"Your artifact is now level {self.experience.level}!")
             if self.experience.level % 4 == 0:
-                self.add_new_attribute()
+                self.add_new_attribute(True)
             self.main_attribute.experience.level = self.experience.level
             self.main_attribute.handle_value(self.star_rating.value)
         else:
             WarningText("Artifact is max level!").display()
-
-        if self.display_info:
             enter_to_continue()
 
-    def add_new_attribute(self):
+    def add_new_attribute(self, display_info: bool = False):
         new_attribute = Buff(experience=Experience(1))
         while (new_attribute.attribute_type == self.main_attribute.attribute_type) and (new_attribute.is_percent == self.main_attribute.is_percent):
             new_attribute = Buff(experience=Experience(1))
 
-        if self.display_info:
+        if display_info:
             InfoText(f"^{new_attribute.attribute_type.name}{'%' if new_attribute.is_percent else ''}^").display()
         for attribute in self.attributes:
             if (new_attribute.attribute_type == attribute.attribute_type) and (
