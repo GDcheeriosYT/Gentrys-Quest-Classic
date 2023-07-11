@@ -34,7 +34,7 @@ import argparse
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.5.0"
+version = "V1.5.2"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -63,8 +63,6 @@ if debug_mode:
     TestingHandler().start()
 else:
     console.rule("Gentry's Quest")
-    WarningText("No argument for server!\n").display()
-    InfoText("Defaulting to https://gdcheerios.com\n").display()
     if args.server is None:
         server = Server("https://gdcheerios.com")  # default server url
     else:
