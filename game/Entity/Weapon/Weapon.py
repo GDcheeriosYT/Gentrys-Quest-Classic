@@ -20,6 +20,7 @@ from Graphics.Content.Text.DescriptionText import DescriptionText
 
 # IO packages
 from IO import Window
+from IO.StringMethods import *
 
 
 class Weapon(Entity):
@@ -91,6 +92,9 @@ class Weapon(Entity):
         self.attack = int(self.base_attack + (self.experience.level * self.star_rating.value))
         self.buff.experience.level = self.experience.level
         self.buff.handle_value(self.star_rating.value)
+
+    def list_view(self, index: int = 1):
+        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{f'*{self.buff.attribute_type.abreviate()}'}{'%*' if self.buff.is_percent else '*'}\t{self.experience}"
 
     def jsonify(self):
         return {

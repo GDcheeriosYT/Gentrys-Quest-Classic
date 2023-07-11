@@ -127,7 +127,7 @@ class Artifact(Entity):
 
         return string
 
-    def list_view(self, index: int):
+    def list_view(self, index: int = 1):
         attribute_text = f"*{self.main_attribute.attribute_type.abreviate()}{'%' if self.main_attribute.is_percent else ''}* "
         for buff in self.attributes:
             attribute_text += f"{buff.attribute_type.abreviate()}{'%' if buff.is_percent else ''} "
