@@ -87,11 +87,12 @@ class Artifact(Entity):
         for i in range(buff_bonus_points):
             self.add_new_attribute()
 
-    def level_up(self, amount):
+    def level_up(self, amount, display_info: bool = True):
         if self.experience.level < self.star_rating.value * 4:
             self.experience.level += amount
             self.experience.xp = 0
-            print(f"Your artifact is now level {self.experience.level}!")
+            if display_info:
+                print(f"Your artifact is now level {self.experience.level}!")
             if self.experience.level % 4 == 0:
                 self.add_new_attribute(True)
             self.main_attribute.experience.level = self.experience.level
@@ -99,7 +100,25 @@ class Artifact(Entity):
         else:
             WarningText("Artifact is max level!").display()
 
-        enter_to_continue()
+        if display_info:
+            enter_to_continue()
+
+    def add_xp(self, amount, display_info: bool = True):
+        def xp(amount):
+            difference = self.experience.get_xp_required(self.star_rating.value) - self.experience.xp
+            while amount >= difference:
+                if difference == 0:
+                    break
+                amount -= difference
+                self.level_up(1, display_info)
+                difference = self.experience.get_xp_required(self.star_rating.value) - self.experience.xp
+            self.experience.xp += amount
+
+        if self.experience.limit is not None:
+            if self.experience.level != self.experience.limit:
+                xp(amount)
+        else:
+            xp(amount)
 
     def add_new_attribute(self, display_info: bool = False):
         new_attribute = Buff(experience=Experience(1))

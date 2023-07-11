@@ -190,10 +190,9 @@ class Inventory:
                         self.artifact_list.list_content()
                         InfoText("\n\nartifact after level up:\n\n").display()
                         artifact_copy: Artifact = deepcopy(artifact)
-                        artifact_copy.display_info = False
 
                         for item in self.artifact_list.get_selections():
-                            artifact_copy.add_xp(self.exchange_artifact(item, False))
+                            artifact_copy.add_xp(self.exchange_artifact(item, False), False)
 
                         Text(artifact_copy.name_and_star_rating()).display()
                         Text(f"{artifact_copy.experience.display_level()} {artifact_copy.experience.display_xp()}/{artifact_copy.experience.get_xp_required(artifact_copy.star_rating.value)} xp").display()
