@@ -92,7 +92,7 @@ class Entity:
         else:
             xp(amount)
 
-    def list_view(self, index: int):
+    def list_view(self, index: int = 1):
         return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
 
     def gacha_info_view(self):
