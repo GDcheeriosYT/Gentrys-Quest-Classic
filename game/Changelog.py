@@ -9,16 +9,11 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Updated display of entities in inventory by GDcheerios"),
-    InfoText("Added way to sort inventory by GDcheerios")
-]
+gameplay = []
 graphics = []
 content = []
 online = []
-code_structure = [
-    InfoText("Added string method manager by GDcheerios")
-]
+code_structure = []
 testing = []
 
 
