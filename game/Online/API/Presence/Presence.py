@@ -3,15 +3,24 @@ from pypresence import Presence
 
 class GamePresence:
     def __init__(self):
-        self.id = 1115885237910634587
-        self.RPC = Presence(self.id)
-        self.RPC.connect()
+        try:
+            self.id = 1115885237910634587
+            self.RPC = Presence(self.id)
+            self.RPC.connect()
+        except:
+            pass
 
     def update_status(self, state: str, details: str = None):
-        self.RPC.update(
-            state=state,
-            details=details
-        )
+        try:
+            self.RPC.update(
+                state=state,
+                details=details
+            )
+        except:
+            pass
 
     def end(self):
-        self.RPC.close()
+        try:
+            self.RPC.close()
+        except:
+            pass
