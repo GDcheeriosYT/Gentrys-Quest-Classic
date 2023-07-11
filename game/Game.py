@@ -149,7 +149,7 @@ class Game:
                                         if Game.equipped_character is None:
                                             character = "nobody"
                                         else:
-                                            character = Game.equipped_character.list_view()
+                                            character = Game.equipped_character.list_view(1)
 
                                         Text(f"you currently have {character} equipped").display()
                                         locations = Game.game_data.content.locations
