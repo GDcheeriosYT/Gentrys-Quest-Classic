@@ -202,8 +202,8 @@ class Character(Entity):
         damage = self.attack.total_value + self.weapon.attack
         is_crit = determine_crit(self.critRate.total_value)
         damage += self.attack.total_value * (self.critDamage.total_value / 100) if is_crit else 0
-        damage -= random.randint(int(enemy.defense.total_value / 2), enemy.defense.total_value)
-        damage = int(damage)
+        defense = int(enemy.defense.total_value + (damage * enemy.damage_negation))
+        damage = int(damage - defense)
         Text(f"{self.name} {self.weapon.verbs.critical if is_crit else self.weapon.verbs.normal} {enemy.name} for {damage} damage").display()
         if damage <= 0:
             WarningText(f"{enemy.name} has dodged").display()

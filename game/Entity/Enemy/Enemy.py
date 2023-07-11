@@ -57,6 +57,7 @@ class Enemy(Entity):
         self.health = Stat(StatTypes.Health)
         self.attack = Stat(StatTypes.Attack)
         self.defense = Stat(StatTypes.Defense)
+        self.damage_negation = 0.005
         self.health_points = health
         self.attack_points = attack
         self.defense_points = defense
@@ -80,12 +81,17 @@ class Enemy(Entity):
         difficulty = 1 + (self.experience.level / 20)
         self.health.set_default(int(calculate(500, difficulty) + calculate(self.experience.level, (5 + calculate(self.experience.level, 0.18 + calculate(difficulty, 0.09))) + calculate(self.health_points, 5))))
         self.attack.set_default(int(calculate(30, difficulty) + calculate(self.experience.level, (calculate(self.experience.level, 0.04 + calculate(difficulty, 0.007))) + calculate(self.attack_points, 2))))
-        self.defense.set_default(int(calculate(35, difficulty) + calculate(self.experience.level, (calculate(self.experience.level, 0.03 + calculate(difficulty, 0.006))) + calculate(self.defense_points, 2))))
+        self.defense.set_default(int(calculate(7, difficulty) + calculate(self.experience.level, (calculate(self.experience.level, 0.03 + calculate(difficulty, 0.006))) + calculate(self.defense_points, 2))))
+        if difficulty >= 10:
+            self.damage_negation = round(0.05 + calculate(0.001, (difficulty - 10)), 3)
+        else:
+            self.damage_negation = round(calculate(0.005, difficulty), 3)
 
     def attack_character(self, character):
         is_crit = determine_crit(20)
-        damage = int(self.attack.total_value + ((self.attack.total_value * 0.50) if is_crit else 0) - random.randint(int(character.defense.total_value / 2),
-                                                                                                                     character.defense.total_value))
+        damage = int(self.attack.total_value + ((self.attack.total_value * 0.50) if is_crit else 0))
+        defense = int(self.defense.total_value * 0.99) + int(damage * 0.01)
+        damage -= defense
         Text(
             f"{self.name} {self.weapon.verbs.critical if is_crit else self.weapon.verbs.normal} {character.name} for {damage} damage").display()
         if damage <= 0:

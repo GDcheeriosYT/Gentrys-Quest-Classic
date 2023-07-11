@@ -122,7 +122,7 @@ test = ["flake8 (==3.7.8)", "hypothesis (==3.55.3)"]
 
 [[package]]
 name = "GPSystem"
-version = "1.1.2"
+version = "1.2"
 description = "The rating system for Gentry's Quest"
 optional = false
 python-versions = "*"
@@ -133,7 +133,7 @@ develop = false
 type = "git"
 url = "https://github.com/GDcheeriosYT/GPSystem.git"
 reference = "HEAD"
-resolved_reference = "b9abad0033db39bf466e3275c80524ccaab3fb89"
+resolved_reference = "ff16b4d8a69f5748198d2a8f82fe2cfb1b856e5c"
 
 [[package]]
 name = "idna"

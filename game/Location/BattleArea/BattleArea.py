@@ -48,7 +48,7 @@ class BattleArea(Area):
 
     def __init__(self, name, difficulty=0, artifact_families=ItemList(content_type=str),
                  enemies=ItemList(content_type=Enemy), is_runnable=True, difficulty_scales=True,
-                 difficulty_scales_after=0, difficulty_setback=0, effects=None):
+                 difficulty_scales_after=0, difficulty_setback=0, effects=None, one_enemy: bool = False):
         super().__init__(name)
         self.name = Text(name, Style(text_color="red")).raw_output()
         self.difficulty = Difficulty(difficulty)
@@ -58,6 +58,7 @@ class BattleArea(Area):
         self.difficulty_scales = difficulty_scales
         self.difficulty_scales_after = difficulty_scales_after
         self.difficulty_setback = difficulty_setback
+        self.one_enemy = one_enemy
         if effects is None:
             self.effects = ItemList(content_type=Effect)
         else:
@@ -127,6 +128,9 @@ class BattleArea(Area):
             enemies.append(enemy)
             difficulty_points -= points
 
+        if self.one_enemy:
+            return [random.choice(enemies)]
+
         return enemies
 
     def initialize_artifacts(self, difficulty, families):
@@ -140,35 +144,64 @@ class BattleArea(Area):
                         artifacts_to_choose_from.append(artifact)
 
         if len(artifacts_to_choose_from) > 0:
-            for i in range(int((self.get_difficulty(difficulty) + 1))):
+            while points >= 25:
+                print(points)
                 artifact = random.choice(artifacts_to_choose_from)
                 star_rating = 1
-                if points >= 25:
-                    star_rating = 1
-                    points -= 25
 
-                elif points >= 50:
-                    star_rating = 2
-                    points -= 50
+                if points >= 125:
+                    value = random.randint(0, 100)
+                    if value > 90:
+                        star_rating = 5
+                    elif value >= 75:
+                        star_rating = 4
+                    else:
+                        star_rating = 3
+                        points += 25
+                    points -= 125
 
                 elif points >= 100:
-                    star_rating = 3
+                    value = random.randint(0, 100)
+                    if value > 97:
+                        star_rating = 5
+                    elif value > 90:
+                        star_rating = 4
+                    else:
+                        star_rating = 3
+                        points += 25
                     points -= 100
 
-                elif points >= 150:
-                    star_rating = 4
-                    points -= 150
+                elif points >= 75:
+                    value = random.randint(0, 100)
+                    if value > 95:
+                        star_rating = 4
+                    elif value >= 75:
+                        star_rating = 3
+                    else:
+                        star_rating = 2
+                        points += 25
+                    points -= 75
 
-                elif points >= 200:
-                    star_rating = 5
-                    points -= 200
+                elif points >= 50:
+                    value = random.randint(0, 100)
+                    if value > 95:
+                        star_rating = 3
+                    elif value >= 75:
+                        star_rating = 2
+                    else:
+                        star_rating = 1
+                        points += 25
+                    points -= 50
 
-                artifact = artifact(StarRating(star_rating))
-                artifacts.append(artifact)
+                elif points >= 25:
+                    value = random.randint(0, 100)
+                    if value > 85:
+                        star_rating = 2
+                    else:
+                        star_rating = 1
+                        points += 20
+                    points -= 25
 
-            for i in range(int((self.get_difficulty(difficulty) + 1))):
-                artifact = random.choice(artifacts_to_choose_from)
-                star_rating = generate_artifact_star_rating(self.get_difficulty(difficulty) + 1)
                 artifact = artifact(StarRating(star_rating))
                 artifacts.append(artifact)
 

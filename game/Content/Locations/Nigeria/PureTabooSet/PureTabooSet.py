@@ -22,5 +22,6 @@ class PureTabooSet(BattleArea):
             "Pure Taboo Set",
             1,
             artifact_families,
-            enemies
+            enemies,
+            one_enemy=True
         )
