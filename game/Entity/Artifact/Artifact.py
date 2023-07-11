@@ -91,15 +91,15 @@ class Artifact(Entity):
         if self.experience.level < self.star_rating.value * 4:
             self.experience.level += amount
             self.experience.xp = 0
-            if self.display_info:
-                print(f"Your artifact is now level {self.experience.level}!")
+            print(f"Your artifact is now level {self.experience.level}!")
             if self.experience.level % 4 == 0:
                 self.add_new_attribute(True)
             self.main_attribute.experience.level = self.experience.level
             self.main_attribute.handle_value(self.star_rating.value)
         else:
             WarningText("Artifact is max level!").display()
-            enter_to_continue()
+
+        enter_to_continue()
 
     def add_new_attribute(self, display_info: bool = False):
         new_attribute = Buff(experience=Experience(1))
