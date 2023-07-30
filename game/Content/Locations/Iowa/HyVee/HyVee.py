@@ -23,6 +23,9 @@ class HyVee(BattleArea):
     def __init__(self):
         artifact_families = ItemList(content_type=str)
         artifact_families.add("Hyvee")
+        artifact_families.add("Brayden Messerschmidt")
+        artifact_families.add("Kelly Krysa")
+        artifact_families.add("David Napier")
         enemies = ItemList(content_type=Enemy)
         enemies.add(CustomerServiceManager())
         enemies.add(Baker())

@@ -379,12 +379,13 @@ class Inventory:
         )
 
         overall_gp = rating_details['rating']
+        ranking = f"{rating_details['ranking']['tier']}[{rating_details['ranking']['tier value']}]"
         character_gp = rating_details['totals']['characters']
         weapon_gp = rating_details['totals']['weapons']
         artifact_gp = rating_details['totals']['artifacts']
         return (
             f"""
-{overall_gp["weighted"]}|{overall_gp["unweighted"]}gp\t V{GPSystem.version}
+{overall_gp["weighted"]}|{overall_gp["unweighted"]}gp {ranking}\t V{GPSystem.version}
 
 ${self.money}
 1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp

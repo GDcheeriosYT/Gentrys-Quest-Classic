@@ -25,7 +25,9 @@ class User:
         self.id = id
         self.username = username
         self.powerlevel = powerlevel
-        self.ranking = "unranked"
+        self.placement = 0
+        self.ranking = "unranked", ''
 
     def __repr__(self):
-        return f"#{self.ranking} {self.username} {self.powerlevel}gp"
+        ranking_string = f"{self.ranking[0]}[{self.ranking[1]}]" if self.ranking[0] != "" else "unranked"
+        return f"#{self.placement} {self.username} {self.powerlevel}gp {ranking_string}"
