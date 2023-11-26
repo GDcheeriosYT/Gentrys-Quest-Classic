@@ -10,7 +10,8 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Simplified Stat methods")
+    InfoText("Simplified Stat methods"),
+    InfoText("Added classic to game rule")
 ]
 graphics = []
 content = []
