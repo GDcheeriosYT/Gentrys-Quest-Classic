@@ -69,6 +69,7 @@ if args.testing:
 else:
     username = None
     password = None
+    account_data = None
     console.rule("Gentry's Quest Classic")
     if args.server is None:
         server = Server("https://gdcheerios.com")  # default server url
@@ -80,7 +81,8 @@ else:
         if isinstance(account_info, str):
             username = get_string("username")
             password = enter_password("password: ")
-            if server.API.login(username, password, False) == "nope":
+            account_data = server.API.login(username, password, False)
+            if account_data == "nope":
                 username, password = None, None
             else:
                 server_data = json.load(open("ServerData.json", "r"))
@@ -92,14 +94,15 @@ else:
         else:
             username = account_info.username
             password = account_info.password
-            if server.API.login(username, password) == "nope":
+            account_data = server.API.login(username, password)
+            if account_data == "nope":
                 username, password = None, None
 
     if username is not None and password is not None:
         latest_version = server.API.get_version()
         version_differs = version != latest_version
         account_info = AccountInfo(username, password)  # make class to store account info
-        user_data = server.API.login(account_info.username, account_info.password)  # game data class initialization
+        user_data = account_data  # game data class initialization
         user = User(user_data["id"], account_info.username, server.API.get_power_level())  # user class initialization
         game_data = GameData(user_data["metadata"]["Gentry's Quest data"])
         game = Game(game_data, version, server)
