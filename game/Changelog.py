@@ -15,7 +15,9 @@ gameplay = [
 ]
 graphics = []
 content = []
-online = []
+online = [
+    InfoText("Reworked sign in! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/66]PR\[#66][/link] by GDcheerios")
+]
 code_structure = []
 testing = []
 
