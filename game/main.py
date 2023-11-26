@@ -88,6 +88,7 @@ else:
                     "username": username,
                     "password": password
                 })
+                json.dump(server_data, open("ServerData.json", "w"))
         else:
             username = account_info.username
             password = account_info.password
