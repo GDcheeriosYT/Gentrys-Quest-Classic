@@ -28,6 +28,8 @@ from Entity.Weapon.Weapon import Weapon
 
 # interface packages
 from Interface.Interfaces.Settings import SettingsInterface
+from Interface.Interfaces.RoomCreation import RoomCreation
+from Interface.Interfaces.MultiplayerListing import MultiplayerListing
 
 # graphics packages
 from Graphics.Content.Text.InfoText import InfoText
@@ -267,7 +269,8 @@ class Game:
                     if not Game.server.disabled:
                         choices2 = get_int("1. Online Users\n"
                                            "2. Leaderboard\n"
-                                           "3. Back")
+                                           "3. Multiplayer\n"
+                                           "4. Back")
 
                         if choices2 == 1:
                             Window.place_rule("Online Users")
@@ -294,6 +297,26 @@ class Game:
                             online_status.stop()
                             players.list_content(False)
                             enter_to_continue()
+
+                        elif choices2 == 3:
+                            multiplayer_choice = MultiplayerListing(Game.server).visit(return_type=True)
+                            if multiplayer_choice == "Create Room":
+                                not_done = True
+                                room_creation = RoomCreation()
+                                while not_done:
+                                    result = room_creation.visit(return_type=True)
+                                    if result is not None:
+                                        if result:
+                                            not_done = False
+                                        else:
+                                            break
+
+                                if not not_done:
+                                    Game.server.API.create_multiplayer_room(room_creation.get_room())
+
+
+
+
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
 

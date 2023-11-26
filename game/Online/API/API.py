@@ -1,4 +1,6 @@
 # online game packages
+import json
+
 from .Login import login
 from .UploadData import upload_data
 from .GetPowerLevel import get_power_level
@@ -90,3 +92,12 @@ class API:
 
     def get_version(self):
         return requests.get(f"{self.url}/api/gq/get-version").text
+
+    def get_multiplayer_rooms(self):
+        result = requests.get(f"{self.url}/api/gq/get-rooms")
+        print(result, result.text)
+        print(json.loads(requests.get(f"{self.url}/api/gq/get-rooms").text))
+        return json.loads(requests.get(f"{self.url}/api/gq/get-rooms").text)
+
+    def create_multiplayer_room(self, room):
+        requests.post(f"{self.url}/api/gq/create-room", json=room.jsonify())
