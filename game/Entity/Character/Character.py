@@ -285,6 +285,7 @@ class Character(Entity):
         self.attack.set_additional(attack)
         self.defense.set_additional(defense)
         self.critRate.set_additional(critRate)
+        critDamage += (self.critRate.standalone_total_value - 100) if self.critRate.standalone_total_value > 100 else 0
         self.critDamage.set_additional(critDamage)
 
     def create_buff_groups(self):

@@ -32,14 +32,17 @@ class API:
         self.url = url
         self.id = id
 
-    def login(self, username, password):
+    def login(self, username, password, do_exit: bool = True):
         self.token.verify()
         login_result = login(username, password, self.url)
         if login_result == "nope":
             WarningText("Couldn't Log In...").display()
             time.sleep(1)
-            self.token.delete()
-            exit(0)
+            if do_exit:
+                self.token.delete()
+                exit(0)
+            else:
+                return login_result
         else:
             self.id = login_result["id"]
             requests.post(f"{self.url}/api/gq/check-in/{self.id}")

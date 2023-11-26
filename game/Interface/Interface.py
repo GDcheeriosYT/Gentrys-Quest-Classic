@@ -42,13 +42,13 @@ class Interface:
         selection = selection - 1
         return selection
 
-    def visit(self, clear_window=True):
+    def visit(self, clear_window=True, return_type: bool = False):
         while True:
             if clear_window:
                 Window.clear()
             if self.is_rule:
                 Console().rule(self.title)
-            else:
-                Text(self.content.info).display()
-                selection = get_int(self.content.show_options())
-                return self.choose(selection)
+
+            Text(self.content.info).display()
+            selection = get_int(self.content.show_options())
+            return self.content.options[self.choose(selection)] if return_type else self.choose(selection)
