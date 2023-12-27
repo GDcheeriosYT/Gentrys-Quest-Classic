@@ -5,3 +5,4 @@
 *.exe
 /dist/
 /dist/Gentrys Quest.exe
+/game/ServerData.json

@@ -13,10 +13,11 @@ class InterfaceContent:
 
     content = None
 
-    def __init__(self, info="this is an interface", options=["do nothing"]):
+    def __init__(self, info="this is an interface", options=["do nothing"], contain_back: bool = True):
         self.info = info
         self.options = options
-        self.options.append("back")
+        if contain_back:
+            self.options.append("back")
 
     def show_options(self):
         string = ""

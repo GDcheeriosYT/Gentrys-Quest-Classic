@@ -10,11 +10,14 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Simplified Stat methods")
+    InfoText("Simplified Stat methods"),
+    InfoText("Added classic to game rule")
 ]
 graphics = []
 content = []
-online = []
+online = [
+    InfoText("Reworked sign in! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/66]PR\[#66][/link] by GDcheerios")
+]
 code_structure = []
 testing = []
 

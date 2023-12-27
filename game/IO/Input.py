@@ -8,6 +8,9 @@ from Collection.RangeGroup import RangeGroup
 # built-in packages
 import random
 
+# external packages
+import maskpass
+
 
 def get_int(text: str = "text", pre_input=None):
     while True:
@@ -75,6 +78,12 @@ def get_range_or_int(text: str = "text"):
         else:
             if inp == "done":
                 return "done"
+
+
+def enter_password(prompt: str):
+    password = maskpass.askpass(prompt, mask="*")
+    return password
+
 
 def enter_to_continue():
     input("press enter to continue...\n")
