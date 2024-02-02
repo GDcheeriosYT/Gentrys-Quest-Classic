@@ -60,7 +60,7 @@ class API:
         for id in player_list.keys():
             user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
             user.placement = player_list[id]["placement"]
-            user.ranking = player_list[id]["ranking"]["tier"], player_list[id]["ranking"]["tier value"]
+            user.ranking = player_list[id]["ranking"]["rank"], player_list[id]["ranking"]["tier"]
             online_players.append(user)
 
         def sort_thing(user: User):
@@ -72,11 +72,12 @@ class API:
     def get_leaderboard(self):
         player_list: dict = requests.get(f"{self.url}/api/gq/get-leaderboard/0+{int(Window.console.height - 3)}").json()
         leaderboard = []
+        print(player_list)
 
         for id in player_list.keys():
             user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
             user.placement = player_list[id]["placement"]
-            user.ranking = player_list[id]["ranking"]["tier"], player_list[id]["ranking"]["tier value"]
+            user.ranking = player_list[id]["ranking"]["rank"], player_list[id]["ranking"]["tier"]
             leaderboard.append(user)
 
         def sort_thing(user: User):

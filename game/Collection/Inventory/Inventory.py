@@ -379,7 +379,7 @@ class Inventory:
         )
 
         overall_gp = rating_details['rating']
-        ranking = f"{rating_details['ranking']['tier']}[{rating_details['ranking']['tier value']}]"
+        ranking = f"{rating_details['ranking']['rank']}[{rating_details['ranking']['tier']}]"
         character_gp = rating_details['totals']['characters']
         weapon_gp = rating_details['totals']['weapons']
         artifact_gp = rating_details['totals']['artifacts']
