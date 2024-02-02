@@ -9,15 +9,10 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Simplified Stat methods"),
-    InfoText("Added classic to game rule")
-]
+gameplay = []
 graphics = []
 content = []
-online = [
-    InfoText("Reworked sign in! [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/66]PR\[#66][/link] by GDcheerios")
-]
+online = []
 code_structure = []
 testing = []
 

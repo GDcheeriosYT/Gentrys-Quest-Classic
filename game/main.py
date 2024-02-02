@@ -39,7 +39,7 @@ from flask_bcrypt import Bcrypt
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.8"
+version = "V1.8.1"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",

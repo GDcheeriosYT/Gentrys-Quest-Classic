@@ -72,7 +72,6 @@ class API:
     def get_leaderboard(self):
         player_list: dict = requests.get(f"{self.url}/api/gq/get-leaderboard/0+{int(Window.console.height - 3)}").json()
         leaderboard = []
-        print(player_list)
 
         for id in player_list.keys():
             user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
