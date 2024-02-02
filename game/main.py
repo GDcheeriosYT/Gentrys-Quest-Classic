@@ -39,7 +39,7 @@ from flask_bcrypt import Bcrypt
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.8.1"
+version = "V1.8.2"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -104,7 +104,8 @@ else:
         account_info = AccountInfo(username, password)  # make class to store account info
         user_data = account_data  # game data class initialization
         user = User(user_data["id"], account_info.username, server.API.get_power_level())  # user class initialization
-        game_data = GameData(user_data["metadata"]["Gentry's Quest Classic data"])
+        game_data = user_data["metadata"]["Gentry's Quest Classic data"]
+        game_data = GameData(game_data) if game_data else GameData(None)
         game = Game(game_data, version, server)
         if version_differs:
             WarningText("You are not on the right Gentry's Quest version!\n"
