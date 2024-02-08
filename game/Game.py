@@ -128,74 +128,66 @@ class Game:
                 if choices == 1:
                     Game.presence.update_status("In menu")
                     while True:
-                        choices1 = get_int("1. Singleplayer\n"
-                                           "2. Back")
-                        if choices1 == 1:
+                        choices2 = get_int("1. Story\n"
+                                           "2. Travel\n"
+                                           "3. Gacha\n"
+                                           "4. Inventory\n"
+                                           "5. View Families\n"
+                                           "6. Back")
+
+                        if choices2 == 1:
+                            InfoText("Coming soon...").display()
+                            enter_to_continue()
+
+                        elif choices2 == 2:
                             while True:
-                                choices2 = get_int("1. Story\n"
-                                                   "2. Travel\n"
-                                                   "3. Gacha\n"
-                                                   "4. Inventory\n"
-                                                   "5. View Families\n"
-                                                   "6. Back")
+                                if Game.equipped_character is None:
+                                    character = "nobody"
+                                else:
+                                    character = Game.equipped_character.name
 
-                                if choices2 == 1:
-                                    InfoText("Coming soon...").display()
-                                    enter_to_continue()
-                                    #Game.story.start(Game.equipped_character, Game.game_data.inventory, Game.game_data.content, Game.story_index)
+                                Text(f"you currently have {character} equipped").display()
+                                locations = Game.game_data.content.locations
+                                for location in locations:
+                                    Text(f"{locations.index(location) + 1}. {location}").display()
+                                choices3 = get_int(f"{len(locations) + 1}. back")
 
-                                elif choices2 == 2:
-                                    while True:
-                                        if Game.equipped_character is None:
-                                            character = "nobody"
-                                        else:
-                                            character = Game.equipped_character.name
-
+                                if choices3 != len(locations) + 1:
+                                    try:
+                                        location = locations[choices3 - 1]
+                                        Game.presence.update_status("At location", location.name.content)
                                         Text(f"you currently have {character} equipped").display()
-                                        locations = Game.game_data.content.locations
-                                        for location in locations:
-                                            Text(f"{locations.index(location) + 1}. {location}").display()
-                                        choices3 = get_int(f"{len(locations) + 1}. back")
-
-                                        if choices3 != len(locations) + 1:
-                                            try:
-                                                location = locations[choices3 - 1]
-                                                Game.presence.update_status("At location", location.name.content)
-                                                Text(f"you currently have {character} equipped").display()
-                                                location.list_areas()
-                                                location.select_area(Game.equipped_character, Game.game_data.inventory, Game.game_data.content)
-                                            except IndexError:
-                                                pass
-
-                                        else:
-                                            break
-
-                                elif choices2 == 3:
-                                    Game.presence.update_status("gacha-ing")
-                                    valley_high_school = ValleyHighSchool()
-                                    base_gacha = BaseGacha()
-                                    Text(f"1. {valley_high_school.name.raw_output()}\n"
-                                         f"2. {base_gacha.name.raw_output()}").display()
-                                    choices3 = get_int("3. back")
-
-                                    if choices3 == 1:
-                                        valley_high_school.manage_input(Game.game_data.inventory)
-
-                                    elif choices3 == 2:
-                                        base_gacha.manage_input(Game.game_data.inventory)
-
-                                elif choices2 == 4:
-                                    Game.presence.update_status("In inventory")
-                                    inventory_results = Game.game_data.inventory.manage_input(Game.equipped_character)
-                                    if inventory_results is not None:
-                                        Game.equipped_character = inventory_results
-
-                                elif choices2 == 5:
-                                    Game.presence.update_status("Viewing artifact families")
-                                    Game.game_data.content.display_artifact_families()
+                                        location.list_areas()
+                                        location.select_area(Game.equipped_character, Game.game_data.inventory, Game.game_data.content)
+                                    except IndexError:
+                                        pass
 
                                 else:
                                     break
+
+                        elif choices2 == 3:
+                            Game.presence.update_status("gacha-ing")
+                            valley_high_school = ValleyHighSchool()
+                            base_gacha = BaseGacha()
+                            Text(f"1. {valley_high_school.name.raw_output()}\n"
+                                 f"2. {base_gacha.name.raw_output()}").display()
+                            choices3 = get_int("3. back")
+
+                            if choices3 == 1:
+                                valley_high_school.manage_input(Game.game_data.inventory)
+
+                            elif choices3 == 2:
+                                base_gacha.manage_input(Game.game_data.inventory)
+
+                        elif choices2 == 4:
+                            Game.presence.update_status("In inventory")
+                            inventory_results = Game.game_data.inventory.manage_input(Game.equipped_character)
+                            if inventory_results is not None:
+                                Game.equipped_character = inventory_results
+
+                        elif choices2 == 5:
+                            Game.presence.update_status("Viewing artifact families")
+                            Game.game_data.content.display_artifact_families()
 
                         else:
                             break
