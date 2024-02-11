@@ -92,10 +92,24 @@ class Inventory:
                     if is_not_empty(self.artifact_list.content, "artifact"):
                         self.manage_artifact(self.artifact_list.select(remove=False))
                 elif num == 4:
+                    if is_not_empty(self.artifact_list.content, "artifact"):
+                        while True:
+                            selections = self.artifact_list.select(False, list_content=True)
+                            if selections is None:
+                                pass
+
+                            elif isinstance(selections, list):
+                                for artifact_index in selections:
+                                    self.money += int(self.exchange_artifact(self.artifact_list.get(artifact_index), True) / 5)
+
+                                break
+
+
+                elif num == 5:
                     self.sort_type.select()
                     self.sort_things()
                     clear()
-                elif num == 5:
+                elif num == 6:
                     self.reverse_sort.toggle_setting()
                     self.sort_things()
                     clear()
@@ -392,8 +406,10 @@ ${self.money}
 2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
 3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
 
-4. sort type    {self.sort_type}
-5. reverse sort {self.reverse_sort}
-6. back
+4. transfer artifacts to money
+
+5. sort type    {self.sort_type}
+6. reverse sort {self.reverse_sort}
+7. back
 """
         )
