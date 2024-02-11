@@ -47,6 +47,7 @@ from Content.Characters.CarterBallard import CarterBallard
 from Content.Characters.PeteMarks import PeteMarks
 from Content.Characters.MJ import MJ
 from Content.Characters.ZachSmith import ZachSmith
+from Content.Characters.BenMeier import BenMeier
 
 # weapons
 from Content.Weapons.AlecsRock import AlecsRock
@@ -69,6 +70,7 @@ from Content.Weapons.SharpThrowingCards import SharpThrowingCards
 from Content.Weapons.ShitLauncherSupreem import ShitLauncherSupreem
 from Content.Weapons.SirFarQuad import SirFarQuad
 from Content.Weapons.RatPoison import RatPoison
+from Content.Weapons.DogLeg import DogLeg
 
 
 class ValleyHighSchool(Gacha):
@@ -115,7 +117,8 @@ class ValleyHighSchool(Gacha):
                 CarterBallard(),
                 PeteMarks(),
                 MJ(),
-                ZachSmith()
+                ZachSmith(),
+                BenMeier()
             ],
             [
                 AlecsRock(),
@@ -137,7 +140,8 @@ class ValleyHighSchool(Gacha):
                 SharpThrowingCards(),
                 ShitLauncherSupreem(),
                 SirFarQuad(),
-                RatPoison()
+                RatPoison(),
+                DogLeg()
             ],
             1000
         )

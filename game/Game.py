@@ -253,6 +253,7 @@ class Game:
                     Text("Seth").display()
                     Text("Oliver").display()
                     Text("Toby").display()
+                    Text("Ben Meier").display()
 
                     enter_to_continue()
 
