@@ -57,6 +57,7 @@ from Content.Characters.CarterBallard import CarterBallard
 from Content.Characters.PeteMarks import PeteMarks
 from Content.Characters.MJ import MJ
 from Content.Characters.ZachSmith import ZachSmith
+from Content.Characters.BenMeier import BenMeier
 
 # weapons
 from Content.Weapons.AlecsRock import AlecsRock
@@ -79,6 +80,7 @@ from Content.Weapons.Ichimonji import Ichimonji
 from Content.Weapons.MasonKiller import MasonKiller
 from Content.Weapons.SharpThrowingCards import SharpThrowingCards
 from Content.Weapons.RatPoison import RatPoison
+from Content.Weapons.DogLeg import DogLeg
 
 # built-in packages
 import random
@@ -105,6 +107,7 @@ class ValleyHighSchool(BattleArea):
         artifact_families.add("Nolan Anderson")
         artifact_families.add("Spencer George")
         artifact_families.add("Mr.Gentry")
+        artifact_families.add("Ben Meier")
         enemies = ItemList(content_type=Enemy)
         enemies.add(FeralLunchLady())
         enemies.add(FlyingPencil())
@@ -153,6 +156,7 @@ class ValleyHighSchool(BattleArea):
         enemies.add(PeteMarks().create_enemy(RatPoison()))
         enemies.add(MJ().create_enemy())
         enemies.add(ZachSmith().create_enemy())
+        enemies.add(BenMeier().create_enemy(DogLeg()))
         super().__init__(
             "Valley High School",
             0,
