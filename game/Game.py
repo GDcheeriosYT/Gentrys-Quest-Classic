@@ -1,4 +1,5 @@
 # game packages
+import IO.Input
 from Changelog import display_changelog
 
 # collection packages
@@ -259,7 +260,8 @@ class Game:
                     if not Game.server.disabled:
                         choices2 = get_int("1. Online Users\n"
                                            "2. Leaderboard\n"
-                                           "3. Back")
+                                           "3. Online PvP\n"
+                                           "4. Back")
 
                         if choices2 == 1:
                             Window.place_rule("Online Users")
@@ -286,6 +288,42 @@ class Game:
                             online_status.stop()
                             players.list_content(False)
                             enter_to_continue()
+
+                        elif choices2 == 3:
+                            if Game.equipped_character:
+                                Window.place_rule("Online PvP")
+                                username = get_string("Who would you like to fight?\nPlease provide a player's username:\n")
+                                player_data = Game.server.API.receive_player(username)
+                                if player_data != "Not Found" and player_data["metadata"]["Gentry's Quest Classic data"]:
+                                    player_data_load_status = Status("Loading player data")
+                                    player_data_load_status.start()
+                                    from GameData import GameData
+                                    player_data = GameData(player_data["metadata"]["Gentry's Quest Classic data"])
+                                    player_data_load_status.stop()
+                                    for character in player_data.inventory.character_list.content:
+                                        Text(f"{player_data.inventory.character_list.get_index(character)+1}. {character.list_view()}").display()
+
+                                    character_selection = get_int("who would you like to fight against?")
+                                    if character_selection:
+                                        opponent = player_data.inventory.character_list.get(character_selection - 1)
+                                        player = Game.equipped_character
+
+                                        from Graphics.Content.Text.WarningText import WarningText
+                                        WarningText(f"{player.name} vs {opponent.name}").display()
+
+                                        while player.health.total_value > 0 and opponent.health.total_value > 0:
+                                            print(f"you: {player.health.total_value}")
+                                            print(f"opponent: {player.health.total_value}")
+                                            IO.Input.enter_to_continue()
+                                            player.attack_enemy(opponent)
+                                            opponent.attack_enemy(player)
+
+                            else:
+                                print("please equip a character first!")
+                                time.sleep(1)
+
+
+
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
 

@@ -2,6 +2,7 @@
 from .Login import login
 from .UploadData import upload_data
 from .GetPowerLevel import get_power_level
+from .RecievePlayer import receive_player
 from ..User.User import User
 
 # graphics game packages
@@ -90,3 +91,7 @@ class API:
 
     def get_version(self):
         return requests.get(f"{self.url}/api/gq/get-version").text
+
+    def receive_player(self, username_or_id):
+        return receive_player(username_or_id, self.url)
+

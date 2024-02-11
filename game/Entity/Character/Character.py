@@ -202,7 +202,10 @@ class Character(Entity):
         damage = self.attack.total_value + self.weapon.attack
         is_crit = determine_crit(self.critRate.total_value)
         damage += self.attack.total_value * (self.critDamage.total_value / 100) if is_crit else 0
-        defense = int(enemy.defense.total_value + (damage * enemy.damage_negation))
+        try:
+            defense = int(enemy.defense.total_value + (damage * enemy.damage_negation))
+        except AttributeError:
+            defense = int(enemy.defense.total_value * 0.99) + int(damage * 0.01)
         damage = int(damage - defense)
         Text(f"{self.name} {self.weapon.verbs.critical if is_crit else self.weapon.verbs.normal} {enemy.name} for {damage} damage").display()
         if damage <= 0:
