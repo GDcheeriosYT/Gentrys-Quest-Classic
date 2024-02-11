@@ -91,25 +91,30 @@ class Inventory:
                 elif num == 3:
                     if is_not_empty(self.artifact_list.content, "artifact"):
                         self.manage_artifact(self.artifact_list.select(remove=False))
-                elif num == 4:
+                elif num == 385475867:
                     if is_not_empty(self.artifact_list.content, "artifact"):
                         while True:
-                            selections = self.artifact_list.select(False, list_content=True)
-                            if selections is None:
-                                pass
+                            self.artifact_list.list_content()
 
-                            elif isinstance(selections, list):
-                                for artifact_index in selections:
-                                    self.money += int(self.exchange_artifact(self.artifact_list.get(artifact_index), True) / 5)
+                            inp = self.artifact_list.select(False, list_content=False)
+
+                            if inp is None:
+                                break
+
+                            elif isinstance(inp, list):
+                                counter = 0
+                                while counter < len(inp):
+                                    self.money += int(self.exchange_artifact(self.artifact_list.get(inp[counter])) / 5)
+                                    inp = [x - 1 for x in inp]
+                                    counter += 1
 
                                 break
 
-
-                elif num == 5:
+                elif num == 4:
                     self.sort_type.select()
                     self.sort_things()
                     clear()
-                elif num == 6:
+                elif num == 5:
                     self.reverse_sort.toggle_setting()
                     self.sort_things()
                     clear()
@@ -122,19 +127,28 @@ class Inventory:
 
     def sort_things(self):
         if self.sort_type.selected_value == "Star Rating":
-            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
-            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
-            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.star_rating.value, reverse=self.reverse_sort.toggled)
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.star_rating.value,
+                                                 reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.star_rating.value,
+                                              reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.star_rating.value,
+                                                reverse=self.reverse_sort.toggled)
 
         elif self.sort_type.selected_value == "Level":
-            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
-            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
-            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.experience.level, reverse=self.reverse_sort.toggled)
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.experience.level,
+                                                 reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.experience.level,
+                                              reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.experience.level,
+                                                reverse=self.reverse_sort.toggled)
 
         else:
-            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
-            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
-            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.name, reverse=self.reverse_sort.toggled)
+            self.character_list.content = sorted(self.character_list.content, key=lambda x: x.name,
+                                                 reverse=self.reverse_sort.toggled)
+            self.weapon_list.content = sorted(self.weapon_list.content, key=lambda x: x.name,
+                                              reverse=self.reverse_sort.toggled)
+            self.artifact_list.content = sorted(self.artifact_list.content, key=lambda x: x.name,
+                                                reverse=self.reverse_sort.toggled)
 
     def can_afford(self, amount):
         if self.money >= amount:
@@ -209,8 +223,10 @@ class Inventory:
                             artifact_copy.add_xp(self.exchange_artifact(item, False), False)
 
                         Text(artifact_copy.name_and_star_rating()).display()
-                        Text(f"{artifact_copy.experience.display_level()} {artifact_copy.experience.display_xp()}/{artifact_copy.experience.get_xp_required(artifact_copy.star_rating.value)} xp").display()
-                        Text(f"+{int(int(artifact_copy.experience.level/4) - int(artifact.experience.level/4))} attributes").display()
+                        Text(
+                            f"{artifact_copy.experience.display_level()} {artifact_copy.experience.display_xp()}/{artifact_copy.experience.get_xp_required(artifact_copy.star_rating.value)} xp").display()
+                        Text(
+                            f"+{int(int(artifact_copy.experience.level / 4) - int(artifact.experience.level / 4))} attributes").display()
 
                         inp = self.artifact_list.select(False, list_content=False)
 
@@ -262,7 +278,8 @@ class Inventory:
 
                 Text(weapon_copy.name_and_star_rating()).display()
                 Text(f"attack: {weapon_copy.attack}").display()
-                Text(f"{weapon_copy.experience.display_level()} {weapon_copy.experience.display_xp()}/{weapon_copy.experience.get_xp_required(weapon_copy.star_rating.value)} xp").display()
+                Text(
+                    f"{weapon_copy.experience.display_level()} {weapon_copy.experience.display_xp()}/{weapon_copy.experience.get_xp_required(weapon_copy.star_rating.value)} xp").display()
                 print("\n")
 
                 inp = self.weapon_list.select(False, list_content=False)
@@ -405,8 +422,6 @@ ${self.money}
 1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
 2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
 3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
-
-4. transfer artifacts to money
 
 5. sort type    {self.sort_type}
 6. reverse sort {self.reverse_sort}
