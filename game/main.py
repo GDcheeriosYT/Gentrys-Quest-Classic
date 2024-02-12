@@ -33,13 +33,12 @@ import atexit
 
 # external packages
 import argparse
-from flask_bcrypt import Bcrypt
 
 # important variables
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.9"
+version = "V1.9.1"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
