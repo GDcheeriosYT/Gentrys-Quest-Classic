@@ -53,3 +53,4 @@ import Content.Characters.Shrpe
 import Content.Characters.SpencerGeorge
 import Content.Characters.WillJohnson
 import Content.Characters.ZachSmith
+import Content.Characters.BenMeier
