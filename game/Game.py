@@ -314,7 +314,7 @@ class Game:
 
                                         while player.health.total_value > 0 and opponent.health.total_value > 0:
                                             print(f"you: {player.health.total_value}")
-                                            print(f"opponent: {player.health.total_value}")
+                                            print(f"opponent: {opponent.health.total_value}")
                                             IO.Input.enter_to_continue()
                                             player.attack_enemy(opponent)
                                             opponent.attack_enemy(player)
