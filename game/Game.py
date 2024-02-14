@@ -9,12 +9,9 @@ from Collection.ItemList import ItemList
 from Location.Location import Location
 
 # content packages
-from Content.Locations.Iowa.Iowa import Iowa
 from Content.Stories.Intro import Intro
 from Content.Gachas.ValleyHighSchool import ValleyHighSchool
 from Content.Gachas.BaseGacha import BaseGacha
-from Content.CharacterContentManager import CharacterContentManager
-#from Content.Stories.GentrysQuest import GentrysQuest
 
 # collection packages
 from Collection.ItemList import ItemList
@@ -308,8 +305,6 @@ class Game:
                                     if character_selection:
                                         opponent = player_data.inventory.character_list.get(character_selection - 1)
                                         player = Game.equipped_character
-
-                                        from Graphics.Content.Text.WarningText import WarningText
                                         WarningText(f"{player.name} vs {opponent.name}").display()
 
                                         while player.health.total_value > 0 and opponent.health.total_value > 0:
@@ -322,8 +317,6 @@ class Game:
                             else:
                                 print("please equip a character first!")
                                 time.sleep(1)
-
-
 
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
