@@ -55,6 +55,9 @@ class API:
     def get_power_level(self):
         return get_power_level(self.id, self.url)
 
+    def retrieve_data(self):
+        requests.get
+
     def get_online_players(self):
         player_list: dict = requests.get(f"{self.url}/api/gq/get-online-players").json()
         online_players = []
