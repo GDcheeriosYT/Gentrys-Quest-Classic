@@ -46,19 +46,11 @@ class Inventory:
     weapon_list = None
     money = None
 
-    def __init__(self, inventory_data):
-        if inventory_data is None:
-            inventory_data = {
-                "money": 0,
-                "characters": [],
-                "weapons": [],
-                "artifacts": []
-            }
-
-        self.money = inventory_data["money"]
-        self.character_list = CharacterList(inventory_data["characters"]).give_item_list()
-        self.weapon_list = WeaponList(inventory_data["weapons"]).give_item_list()
-        self.artifact_list = ArtifactList(inventory_data["artifacts"]).give_item_list()
+    def __init__(self, money: int = 0, characters: list = [], weapons: list = [], artifacts: list = []):
+        self.money = money
+        self.character_list = CharacterList(characters).give_item_list()
+        self.weapon_list = WeaponList(weapons).give_item_list()
+        self.artifact_list = ArtifactList(artifacts).give_item_list()
         self.sort_type = ListSetting("sort", "Star Rating", [
             "Star Rating",
             "Level",
@@ -399,29 +391,20 @@ class Inventory:
             "money": self.money
         }
 
-    def format_length(self, number):
+    @staticmethod
+    def format_length(number):
         if number >= 1000:
             return f"{int(number / 1000)}k"
         return number
 
     def __repr__(self):
-        rating_details = GPSystem.rater.generate_power_details(
-            {'inventory': self.jsonify()}
-        )
-
-        overall_gp = rating_details['rating']
-        ranking = f"{rating_details['ranking']['rank']}[{rating_details['ranking']['tier']}]"
-        character_gp = rating_details['totals']['characters']
-        weapon_gp = rating_details['totals']['weapons']
-        artifact_gp = rating_details['totals']['artifacts']
         return (
             f"""
-{overall_gp["weighted"]}|{overall_gp["unweighted"]}gp {ranking}\t V{GPSystem.version}
 
 ${self.money}
-1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
-2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
-3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
+1. characters\t{self.format_length(self.character_list.get_length())}
+2. weapons   \t{self.format_length(self.weapon_list.get_length())}
+3. artifacts \t{self.format_length(self.artifact_list.get_length())}
 
 5. sort type    {self.sort_type}
 6. reverse sort {self.reverse_sort}

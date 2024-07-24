@@ -120,11 +120,10 @@ class Game:
             try:
                 choices = get_int("Main Menu\n"
                                   "1. Play\n"
-                                  "2. Settings\n"
-                                  "3. Credits\n"
-                                  "4. Online\n"
-                                  "5. Changelog\n"
-                                  "6. Quit")
+                                  "2. Credits\n"
+                                  "3. Online\n"
+                                  "4. Changelog\n"
+                                  "5. Quit")
 
                 if choices == 1:
                     Game.presence.update_status("In menu")
@@ -194,13 +193,6 @@ class Game:
                             break
 
                 elif choices == 2:
-                    Window.clear()
-                    try:
-                        Game.game_data.settings = SettingsInterface(Game.game_data).visit()
-                    except TypeError:
-                        Window.clear()
-
-                elif choices == 3:
                     Window.place_rule("Game Developers")
                     Text("Brayden", Style(text_color="green")).display()
                     Text("Carter", Style("green", "bright_magenta", ["italic"])).display()
@@ -257,7 +249,7 @@ class Game:
 
                     enter_to_continue()
 
-                elif choices == 4:
+                elif choices == 3:
                     if not Game.server.disabled:
                         choices2 = get_int("1. Online Users\n"
                                            "2. Leaderboard\n"
@@ -328,10 +320,10 @@ class Game:
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
 
-                elif choices == 5:
+                elif choices == 4:
                     display_changelog(Game.version)
 
-                elif choices == 6:
+                elif choices == 5:
                     in_game = False
             except ValueError:
                 WarningText("Number please...").display()

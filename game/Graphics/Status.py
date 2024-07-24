@@ -37,3 +37,8 @@ class Status:
     def modify_status(self, text="doing something", style="dots"):
         self.status = self.console.status(text, spinner=style)
         time.sleep(0.2)
+
+    def live_change(self, text="doing something", style="dots"):
+        self.stop()
+        self.modify_status(text, style)
+        self.start()

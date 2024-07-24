@@ -39,10 +39,11 @@ class Entity:
     description = None
     star_rating = None
     experience = None
+    id = None
 
-    def __init__(self, name, description="description", star_rating=StarRating(1), experience=None, id=None):
+    def __init__(self, name, description="description", star_rating=StarRating(1), experience=None):
         self.name = name
-        self.id = id
+        self.id = None  # set manually
         self.description = description
         self.star_rating = star_rating
         if experience is None:

@@ -46,7 +46,6 @@ class API:
                 return login_result
         else:
             self.id = login_result["id"]
-            requests.post(f"{self.url}/api/gq/check-in/{self.id}")
             return login_result
 
     def upload_data(self, data):
@@ -56,7 +55,7 @@ class API:
         return get_power_level(self.id, self.url)
 
     def retrieve_data(self):
-        requests.get
+        return requests.get(f"{self.url}/api/gqc/get-data/{self.id}").json()
 
     def get_online_players(self):
         player_list: dict = requests.get(f"{self.url}/api/gq/get-online-players").json()
@@ -93,7 +92,7 @@ class API:
         requests.post(f"{self.url}/api/gq/check-out/{self.id}")
 
     def get_version(self):
-        return requests.get(f"{self.url}/api/gq/get-version").text
+        return requests.get(f"{self.url}/api/gqc/get-version").text
 
     def receive_player(self, username_or_id):
         return receive_player(username_or_id, self.url)

@@ -9,7 +9,9 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = []
+gameplay = [
+    InfoText("Got rid of settings.")
+]
 graphics = []
 content = []
 online = []

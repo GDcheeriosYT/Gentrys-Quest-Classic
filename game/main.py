@@ -28,9 +28,6 @@ from IO.Input import *
 # interface packages
 from Interface.Interfaces.Login import Login
 
-# built-in packages
-import atexit
-
 # external packages
 import argparse
 
@@ -38,7 +35,7 @@ import argparse
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.9.1"
+version = "V2.0.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -102,9 +99,9 @@ else:
         version_differs = version != latest_version
         account_info = AccountInfo(username, password)  # make class to store account info
         user_data = account_data  # game data class initialization
-        user = User(user_data["id"], account_info.username, server.API.get_power_level())  # user class initialization
-        game_data = user_data["metadata"]["Gentry's Quest Classic data"]
-        game_data = GameData(game_data) if game_data else GameData(None)
+        user = User(user_data["id"], account_info.username)  # user class initialization
+        game_data = server.API.retrieve_data()
+        game_data = GameData(game_data)
         game = Game(game_data, version, server)
         if version_differs:
             WarningText("You are not on the right Gentry's Quest version!\n"
@@ -116,17 +113,4 @@ else:
             server.API.check_out()
             server.disable()
 
-
-        def byebye():
-            game_status = Status("Uploading data...")
-            game_status.start()
-            game.presence.end()
-            if not server.disabled:
-                server.API.upload_data(game.game_data)
-                server.API.check_out()
-                server.API.token.delete()
-            game_status.stop()
-
-
-        atexit.register(byebye)
         game.start(args.character)

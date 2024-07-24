@@ -1,10 +1,14 @@
 # game packages
 # graphics packages
+
 from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Status import Status
 
 # external packages
 import requests
+
+# built-in packages
+import time
 
 
 class Token:
@@ -24,6 +28,7 @@ class Token:
         self.url = url
         token_status = Status("Generating token", "dots8Bit")
         token_status.start()
+        time.sleep(1)
         self.token = requests.get(f"{url}/api/generate-token").text
         token_status.stop()
 

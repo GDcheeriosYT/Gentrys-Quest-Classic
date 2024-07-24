@@ -36,6 +36,8 @@ class WeaponList:
         load_data_status.start()
         self.weapons = []
         for weapon in weapons:
+            id = weapon[0]  # id
+            weapon = weapon[2]  # json data
             experience = weapon["experience"]
             stats = weapon["stats"]
             verbs = weapon["verbs"]
@@ -50,6 +52,7 @@ class WeaponList:
                 StarRating(weapon["star rating"]),
                 ExperienceObjectHandler(weapon["experience"]).create_experience()
             )
+            new_weapon.id = id
             self.weapons.append(new_weapon)
             # time.sleep(0.1)
         load_data_status.stop()
