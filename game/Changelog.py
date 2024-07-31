@@ -11,7 +11,9 @@ from IO import Window
 # change log groupings
 gameplay = []
 graphics = []
-content = []
+content = [
+    InfoText("Added Karl Goldsmith character!(Valley Character) [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/38]PR\[#38][/link]")
+]
 online = []
 code_structure = []
 testing = []
