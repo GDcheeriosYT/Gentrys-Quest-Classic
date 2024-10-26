@@ -351,6 +351,7 @@ class Character(Entity):
                 artifacts.append(artifact.jsonify())
 
         return {
+            "id": self.id,
             "stats": {
                 "defense": self.default_defense_points,
                 "attack": self.default_attack_points,

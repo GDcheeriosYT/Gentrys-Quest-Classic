@@ -19,8 +19,8 @@ class Server:
     disabled = None
 
     def __init__(self, url="https://gdcheerios.com"):
-        self.url = url
-        self.disabled = False
+        Server.url = url
+        Server.disabled = False
         server_status = Status("connecting to server", "point")
         try:
             server_status.start()
@@ -36,9 +36,15 @@ class Server:
             except:
                 exit(1)
         server_status.stop()
-        self.API = API(Token(self.url), self.url)
+        Server.API = API(Token(self.url), self.url)
 
-    def disable(self):
-        self.url = None
-        self.API = None
-        self.disabled = True
+    @staticmethod
+    def disable():
+        Server.url = None
+        Server.API = None
+        Server.disabled = True
+
+    @staticmethod
+    def get_api():
+        # sometimes the api is not initialized yet,
+        return API

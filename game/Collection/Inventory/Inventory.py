@@ -1,5 +1,7 @@
 # game packages
 # collection packages
+from Entity.Character.Character import Character
+from Entity.Entity import Entity
 from .ArtifactList import ArtifactList
 from .CharacterList import CharacterList
 from .WeaponList import WeaponList
@@ -149,7 +151,7 @@ class Inventory:
             WarningText("You can not afford this").display()
             return False
 
-    def level_up_prompt(self, entity):
+    def level_up_prompt(self, entity: Entity):
         while True:
             money = get_int(f"lvl {entity.experience.display_level()}\n"
                             f"xp {entity.experience.display_xp()}/{entity.experience.get_xp_required(entity.star_rating.value)}xp\n"
@@ -163,11 +165,13 @@ class Inventory:
             if self.can_afford(money):
                 self.money -= money
                 entity.add_xp(money * 10)
+                entity.update_server_data()
 
     def exchange_artifact(self, artifact: Artifact, remove: bool = True):
         star_rating = artifact.star_rating.value
         level = artifact.experience.level
         if remove:
+            artifact.pre_remove()
             self.artifact_list.content.remove(artifact)
         return int((level * star_rating) * 100)
 
@@ -175,6 +179,7 @@ class Inventory:
         star_rating = weapon.star_rating.value
         level = weapon.experience.level
         if remove:
+            weapon.pre_remove()
             self.weapon_list.content.remove(weapon)
         return int((level * star_rating) * 100)
 
@@ -242,6 +247,9 @@ class Inventory:
 
                 else:
                     WarningText("Artifact is max level!").display()
+
+                artifact.update_server_data()
+
             else:
                 break
 
@@ -382,6 +390,18 @@ class Inventory:
 
                 if character.weapon is not None:
                     Text(f"You have equipped {character.weapon.name}").display()
+
+    def add_item(self, item: Entity):
+        if isinstance(item, Artifact):
+            self.artifact_list.add(item)
+            item.create_server_item("artifact")
+        elif isinstance(item, Weapon):
+            self.weapon_list.add(item)
+            item.create_server_item("weapon")
+        elif isinstance(item, Character):
+            self.character_list.add(item)
+            item.create_server_item("character")
+
 
     def jsonify(self):
         return {

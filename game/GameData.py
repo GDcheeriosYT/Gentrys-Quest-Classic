@@ -1,20 +1,13 @@
 # built-in packages
-import json
-import time
 
-from Entity.Character.Character import Character
+from Collection.Inventory.Inventory import Inventory
+# content packages
+from Content.ContentManager import ContentManager
 # graphics packages
 from Graphics.Status import Status
 
-# content packages
-from Content.Settings.GameSettings import GameSettings
-from Content.ContentManager import ContentManager
-from Collection.Inventory.Inventory import Inventory
 
 # config packages
-from Config.StringSetting import StringSetting
-from Config.NumberSetting import NumberSetting
-from Config.ToggleSetting import ToggleSetting
 
 
 class GameData:
@@ -33,12 +26,12 @@ class GameData:
     content = None
 
     def __init__(self, json_data):
-        self.content = ContentManager()
+        GameData.content = ContentManager()
         if json_data:
             status = Status(text="Loading data")
             status.start()
 
-            self.startup_amount = json_data["startup amount"]
+            GameData.startup_amount = json_data["startup amount"]
             money = json_data["money"]
 
             status.live_change("Loading items")
@@ -46,6 +39,10 @@ class GameData:
             characters = []
             artifacts = []
             weapons = []
+
+            # 0 id
+            # 1 type
+            # 2 metadata
 
             for item in json_data["items"]:
                 if item[1] == "character":
@@ -55,18 +52,22 @@ class GameData:
                 elif item[1] == "weapon":
                     weapons.append(item)
 
-            self.inventory = Inventory(money, characters, weapons, artifacts)
+            # look for duplications
+            # for character in characters:
+            #     for artifact in character[2]["equips"]["artifacts"]:
+            #     for artifact in chara
+
+
+            GameData.inventory = Inventory(money, characters, weapons, artifacts)
             status.stop()
         else:
-            self.startup_amount = 0
-            self.inventory = Inventory()
+            GameData.startup_amount = 0
+            GameData.inventory = Inventory()
 
-    def obtain(self):
-        return self.inventory, self.startup_amount, self.settings
-
-    def jsonify(self):
+    @staticmethod
+    def jsonify():
         return {
-            "startupamount": self.startup_amount,
+            "startup amount": GameData.startup_amount,
             "settings": {},
-            "inventory": self.inventory.jsonify()
+            "inventory": GameData.inventory.jsonify()
         }

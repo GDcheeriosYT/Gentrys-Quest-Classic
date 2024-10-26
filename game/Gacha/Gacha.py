@@ -67,7 +67,7 @@ class Gacha:
                 object_mapping[object_details] += 1
 
             if isinstance(object, Weapon):
-                inventory.weapon_list.add(object)
+                inventory.add_item(object)
 
             if isinstance(object, Character):
                 in_inventory = False
@@ -77,7 +77,7 @@ class Gacha:
                         character.add_xp(character.star_rating.value * 100)
 
                 if not in_inventory:
-                    inventory.character_list.add(object)
+                    inventory.add_item(object)
 
         print("You got:")
         for object in object_mapping.keys():

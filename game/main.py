@@ -30,6 +30,7 @@ from Interface.Interfaces.Login import Login
 
 # external packages
 import argparse
+import atexit
 
 # important variables
 console = Console()  # the console
@@ -58,6 +59,17 @@ Initializing server connection info.
 Incase of someone starting this without arguments we run through try and except blocks.
 If a try bock finds an exception we'll use a default value.
 """
+
+
+def on_exit():
+    server.API.update_data(GameData.startup_amount, GameData.inventory.money)
+
+    # we want to delete the token last
+    # we can't upload data without the token
+    server.API.token.delete()
+
+
+atexit.register(on_exit)
 
 if args.testing:
     console.rule("Gentry's Quest [DEBUG MODE]")
@@ -102,7 +114,7 @@ else:
         user = User(user_data["id"], account_info.username)  # user class initialization
         game_data = server.API.retrieve_data()
         game_data = GameData(game_data)
-        game = Game(game_data, version, server)
+        game = Game(version)
         if version_differs:
             WarningText("You are not on the right Gentry's Quest version!\n"
                         f"Your version: {version}\n"

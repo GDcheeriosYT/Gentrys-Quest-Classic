@@ -1,17 +1,15 @@
 # game packages
 # entity packages
-from .Stats.StarRating import StarRating
-from .Stats.Experience import Experience
-from .Stats.Effect.Effect import Effect
-
-# graphics packages
-from Graphics.Content.Text.WarningText import WarningText
-
 # collections packages
 from Collection.ItemList import ItemList
-
+# graphics packages
+from Graphics.Content.Text.WarningText import WarningText
 # IO packages
 from IO.StringMethods import text_length_limiter, star_rating_spacer
+from Online.Server import Server
+from .Stats.Effect.Effect import Effect
+from .Stats.Experience import Experience
+from .Stats.StarRating import StarRating
 
 
 # external packages
@@ -103,6 +101,8 @@ class Entity:
     def name_and_star_rating(self):
         return f"{self.name} {self.star_rating}"
 
+    def jsonify(self): ...
+
     @staticmethod
     def check_minimum(variable, multiplier=1, subtract_one_true=False):
         if variable < 1:
@@ -112,3 +112,15 @@ class Entity:
 
     def add_effect(self, effect):
         self.effects.add(effect)
+
+    def create_server_item(self, item_type: str):
+        if not self.id:
+            self.id = Server.get_api().add_item(item_type, self.jsonify())["item"]["id"]
+
+    def update_server_data(self):
+        if self.id:
+            Server.get_api().update_item(self.id, self.jsonify())
+
+    def pre_remove(self):
+        if self.id:
+            Server.get_api().remove_item(self.id)

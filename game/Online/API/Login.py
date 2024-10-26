@@ -12,10 +12,14 @@ import time
 
 def login(username, password, server_url):
     log_in_status = Status("Logging in", "dots")
-    url = f"{server_url}/api/account/login/{username}+{password}"
+    url = f"{server_url}/api/account/login-json"
+    data = {
+        'username': username,
+        'password': password
+    }
     try:
         log_in_status.start()
-        response = requests.get(url).json()
+        response = requests.post(url, json=data).json()
         log_in_status.stop()
         Console().print(f"Welcome {username}!")
         time.sleep(1)

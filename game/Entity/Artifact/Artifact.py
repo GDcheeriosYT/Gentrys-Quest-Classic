@@ -196,6 +196,7 @@ apart of the {self.family} family
             attributes.append(attribute.jsonify())
 
         return {
+            "id": self.id,
             "stats": {
                 "attributes": attributes,
                 "main attribute": self.main_attribute.jsonify()

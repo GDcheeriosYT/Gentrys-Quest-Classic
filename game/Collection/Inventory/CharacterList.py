@@ -29,6 +29,7 @@ import time
 
 content = ContentManager()
 
+
 class CharacterList:
     """
     Makes a list of characters
