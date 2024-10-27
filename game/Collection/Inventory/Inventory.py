@@ -445,8 +445,8 @@ ${self.money}
 2. weapons   \t{self.format_length(self.weapon_list.get_length())}
 3. artifacts \t{self.format_length(self.artifact_list.get_length())}
 
-5. sort type    {self.sort_type}
-6. reverse sort {self.reverse_sort}
-7. back
+4. sort type    {self.sort_type}
+5. reverse sort {self.reverse_sort}
+6. back
 """
         )
