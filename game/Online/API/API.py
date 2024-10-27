@@ -113,6 +113,14 @@ class API:
                                  headers={"Authorization": API.token.token}).json()
 
     @staticmethod
+    def remove_items(id_list: list):
+        return requests.post(
+            f"{API.url}/api/gqc/remove-items",
+            json={"items": id_list},
+            headers={"Authorization": API.token.token}
+        ).json()
+
+    @staticmethod
     def update_item(id, item_json):
         if id:
             return requests.post(f"{API.url}/api/gqc/update-item/{id}", json=item_json,
@@ -125,5 +133,5 @@ class API:
             'startup amount': startup_amount,
             'money': money
         },
-                      headers={"Authorization": API.token.token}
-                      ).json()
+                             headers={"Authorization": API.token.token}
+                             ).json()

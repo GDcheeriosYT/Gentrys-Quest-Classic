@@ -2,6 +2,8 @@
 # collection packages
 from Entity.Character.Character import Character
 from Entity.Entity import Entity
+from Graphics.Status import loading_status
+from Online.API.API import API
 from .ArtifactList import ArtifactList
 from .CharacterList import CharacterList
 from .WeaponList import WeaponList
@@ -171,7 +173,6 @@ class Inventory:
         star_rating = artifact.star_rating.value
         level = artifact.experience.level
         if remove:
-            artifact.pre_remove()
             self.artifact_list.content.remove(artifact)
         return int((level * star_rating) * 100)
 
@@ -233,13 +234,18 @@ class Inventory:
 
                         elif isinstance(inp, list):
                             counter = 0
+                            artifact_trackers = []
                             while counter < len(inp):
-                                artifact.add_xp(self.exchange_artifact(self.artifact_list.get(inp[counter])))
+                                current_artifact = self.artifact_list.get(inp[counter])
+                                artifact_trackers.append(current_artifact.id)
+                                artifact.add_xp(self.exchange_artifact(current_artifact))
                                 inp = [x - 1 for x in inp]
                                 counter += 1
 
                                 if artifact.experience.level == artifact.experience.limit:
                                     break
+
+                            Inventory.remove_items(artifact_trackers)
 
                             break
 
@@ -410,6 +416,11 @@ class Inventory:
         elif isinstance(item, Character):
             self.character_list.add(item)
             item.create_server_item("character")
+
+    @staticmethod
+    @loading_status
+    def remove_items(items: list):
+        return API.remove_items(items)
 
     def jsonify(self):
         return {
