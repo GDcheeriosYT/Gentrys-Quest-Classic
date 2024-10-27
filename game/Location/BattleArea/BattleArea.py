@@ -304,9 +304,9 @@ class BattleArea(Area):
         except EndException:
             if character is not None:
                 character.update_stats()
+                character.update_server_data()
             pass
 
-        character.update_server_data()
 
 
     def __repr__(self):
