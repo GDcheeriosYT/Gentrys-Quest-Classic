@@ -5,6 +5,28 @@ import time
 from rich.console import Console
 
 
+def loading_status(func):
+    status = Status("loading")
+
+    def wrapper(*args, **kwargs):
+        status.start()
+        func(*args, **kwargs)
+        status.stop()
+
+    return wrapper
+
+
+def instance_loading_status(func):
+    status = Status("loading")
+
+    def wrapper(self, *args, **kwargs):
+        status.start()
+        func(self, *args, **kwargs)
+        status.stop()
+
+    return wrapper
+
+
 class Status:
     """
     Makes a status indicator from the rich.console api
@@ -31,9 +53,14 @@ class Status:
         self.status.start()
 
     def stop(self):
-        #time.sleep(0.5)
+        # time.sleep(0.5)
         self.status.stop()
 
     def modify_status(self, text="doing something", style="dots"):
         self.status = self.console.status(text, spinner=style)
         time.sleep(0.2)
+
+    def live_change(self, text="doing something", style="dots"):
+        self.stop()
+        self.modify_status(text, style)
+        self.start()

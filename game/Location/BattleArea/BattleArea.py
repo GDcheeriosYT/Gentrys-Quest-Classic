@@ -298,13 +298,16 @@ class BattleArea(Area):
                 calculate_percentage()
 
             for artifact in artifacts.content:
-                inventory.artifact_list.add(artifact)
+                inventory.add_item(artifact)
 
             self.results(percentage, money, xp, artifacts)
         except EndException:
             if character is not None:
                 character.update_stats()
+                character.update_server_data()
             pass
+
+
 
     def __repr__(self):
         return f"{self.name} {self.difficulty.__repr__()}"

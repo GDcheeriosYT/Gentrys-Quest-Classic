@@ -1,17 +1,17 @@
 # game packages
+import GameConfig
 # entity packages
-from .Stats.StarRating import StarRating
-from .Stats.Experience import Experience
-from .Stats.Effect.Effect import Effect
-
-# graphics packages
-from Graphics.Content.Text.WarningText import WarningText
-
 # collections packages
 from Collection.ItemList import ItemList
-
+# graphics packages
+from Graphics.Content.Text.WarningText import WarningText
+from Graphics.Status import loading_status
 # IO packages
 from IO.StringMethods import text_length_limiter, star_rating_spacer
+from Online.Server import Server
+from .Stats.Effect.Effect import Effect
+from .Stats.Experience import Experience
+from .Stats.StarRating import StarRating
 
 
 # external packages
@@ -39,9 +39,11 @@ class Entity:
     description = None
     star_rating = None
     experience = None
+    id = None
 
     def __init__(self, name, description="description", star_rating=StarRating(1), experience=None):
         self.name = name
+        self.id = None  # set manually
         self.description = description
         self.star_rating = star_rating
         if experience is None:
@@ -93,13 +95,15 @@ class Entity:
             xp(amount)
 
     def list_view(self, index: int = 1):
-        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
+        return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
 
     def gacha_info_view(self):
         return f"{self.name} {self.star_rating}"
 
     def name_and_star_rating(self):
         return f"{self.name} {self.star_rating}"
+
+    def jsonify(self): ...
 
     @staticmethod
     def check_minimum(variable, multiplier=1, subtract_one_true=False):
@@ -110,3 +114,19 @@ class Entity:
 
     def add_effect(self, effect):
         self.effects.add(effect)
+
+    @loading_status
+    def create_server_item(self, item_type: str):
+        if not self.id:
+            self.id = Server.get_api().add_item(item_type, self.jsonify())["item"]["id"]
+
+    @loading_status
+    def update_server_data(self):
+        if self.id:
+            Server.get_api().update_item(self.id, self.jsonify())
+
+    @loading_status
+    def pre_remove(self):
+        if self.id:
+            Server.get_api().remove_item(self.id)
+            self.id = None

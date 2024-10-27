@@ -37,8 +37,11 @@ class ArtifactList:
         load_data_status.start()
         self.artifacts = []
         for artifact in artifacts:
-            self.artifacts.append(ArtifactObjectHandler(artifact).create_artifact())
-            # time.sleep(0.1)
+            id = artifact[0]  # id
+            artifact = artifact[2]  # json data
+            artifact = ArtifactObjectHandler(artifact).create_artifact()
+            artifact.id = id
+            self.artifacts.append(artifact)
 
         load_data_status.stop()
 

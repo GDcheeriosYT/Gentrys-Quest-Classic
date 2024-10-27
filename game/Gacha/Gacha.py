@@ -1,5 +1,6 @@
 # game packages
 # IO packages
+from Config.NumberSetting import NumberSetting
 from IO.Input import get_int, enter_to_continue
 
 # graphics packages
@@ -67,7 +68,7 @@ class Gacha:
                 object_mapping[object_details] += 1
 
             if isinstance(object, Weapon):
-                inventory.weapon_list.add(object)
+                inventory.add_item(object)
 
             if isinstance(object, Character):
                 in_inventory = False
@@ -75,9 +76,10 @@ class Gacha:
                     if character.name == object.name:
                         in_inventory = True
                         character.add_xp(character.star_rating.value * 100)
+                        character.update_server_data()
 
                 if not in_inventory:
-                    inventory.character_list.add(object)
+                    inventory.add_item(object)
 
         print("You got:")
         for object in object_mapping.keys():
@@ -86,6 +88,7 @@ class Gacha:
         enter_to_continue()
 
     def manage_input(self, inventory: Inventory):
+        pulling_amount = NumberSetting("Pulling", 1, 0, 10)
         while True:
             choice = get_int("1. pull characters\n"
                              "2. pull weapons\n"
@@ -94,20 +97,22 @@ class Gacha:
 
             if choice == 1:
                 objects_obtained = []
-                choice2 = get_int("How many characters would you like to pull?\n")
-                if inventory.can_afford(self.price * choice2):
-                    inventory.money -= self.price * choice2
-                    for i in range(choice2):
+                print("How many characters would you like to pull?\n")
+                pulling_amount.change_value()
+                if inventory.can_afford(self.price * pulling_amount.value):
+                    inventory.money -= self.price * pulling_amount.value
+                    for i in range(pulling_amount.value):
                         objects_obtained.append(self.pull_character())
 
                 self.generate_output(objects_obtained, inventory)
 
             if choice == 2:
                 objects_obtained = []
-                choice2 = get_int("How many weapons would you like to pull?\n")
-                if inventory.can_afford(self.price * choice2):
-                    inventory.money -= self.price * choice2
-                    for i in range(choice2):
+                print("How many weapons would you like to pull?\n")
+                pulling_amount.change_value()
+                if inventory.can_afford(self.price * pulling_amount.value):
+                    inventory.money -= self.price * pulling_amount.value
+                    for i in range(pulling_amount.value):
                         objects_obtained.append(self.pull_weapon())
 
                 self.generate_output(objects_obtained, inventory)
@@ -136,7 +141,7 @@ class Gacha:
 
         for entity in entity_list:
             if entity.star_rating.value == star_rating:
-                entity_pool.append(entity)
+                entity_pool.append(type(entity)())
 
         return entity_pool
 

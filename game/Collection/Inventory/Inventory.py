@@ -1,5 +1,9 @@
 # game packages
 # collection packages
+from Entity.Character.Character import Character
+from Entity.Entity import Entity
+from Graphics.Status import loading_status
+from Online.API.API import API
 from .ArtifactList import ArtifactList
 from .CharacterList import CharacterList
 from .WeaponList import WeaponList
@@ -46,19 +50,11 @@ class Inventory:
     weapon_list = None
     money = None
 
-    def __init__(self, inventory_data):
-        if inventory_data is None:
-            inventory_data = {
-                "money": 0,
-                "characters": [],
-                "weapons": [],
-                "artifacts": []
-            }
-
-        self.money = inventory_data["money"]
-        self.character_list = CharacterList(inventory_data["characters"]).give_item_list()
-        self.weapon_list = WeaponList(inventory_data["weapons"]).give_item_list()
-        self.artifact_list = ArtifactList(inventory_data["artifacts"]).give_item_list()
+    def __init__(self, money: int = 0, characters: list = [], weapons: list = [], artifacts: list = []):
+        self.money = money
+        self.character_list = CharacterList(characters).give_item_list()
+        self.weapon_list = WeaponList(weapons).give_item_list()
+        self.artifact_list = ArtifactList(artifacts).give_item_list()
         self.sort_type = ListSetting("sort", "Star Rating", [
             "Star Rating",
             "Level",
@@ -157,7 +153,7 @@ class Inventory:
             WarningText("You can not afford this").display()
             return False
 
-    def level_up_prompt(self, entity):
+    def level_up_prompt(self, entity: Entity):
         while True:
             money = get_int(f"lvl {entity.experience.display_level()}\n"
                             f"xp {entity.experience.display_xp()}/{entity.experience.get_xp_required(entity.star_rating.value)}xp\n"
@@ -171,6 +167,7 @@ class Inventory:
             if self.can_afford(money):
                 self.money -= money
                 entity.add_xp(money * 10)
+                entity.update_server_data()
 
     def exchange_artifact(self, artifact: Artifact, remove: bool = True):
         star_rating = artifact.star_rating.value
@@ -183,6 +180,7 @@ class Inventory:
         star_rating = weapon.star_rating.value
         level = weapon.experience.level
         if remove:
+            weapon.pre_remove()
             self.weapon_list.content.remove(weapon)
         return int((level * star_rating) * 100)
 
@@ -190,6 +188,7 @@ class Inventory:
         while True:
             if artifact is None:
                 artifact = self.swap_artifact(artifact)
+                artifact.pre_remove()
                 return artifact
             elif artifact == "":
                 break
@@ -206,7 +205,7 @@ class Inventory:
 
             elif choice == 2:
                 if is_equipped:
-                    self.artifact_list.add(artifact)
+                    self.add_item(artifact)
                     return None
 
             elif choice == 3:
@@ -235,21 +234,29 @@ class Inventory:
 
                         elif isinstance(inp, list):
                             counter = 0
+                            artifact_trackers = []
                             while counter < len(inp):
-                                artifact.add_xp(self.exchange_artifact(self.artifact_list.get(inp[counter])))
+                                current_artifact = self.artifact_list.get(inp[counter])
+                                artifact_trackers.append(current_artifact.id)
+                                artifact.add_xp(self.exchange_artifact(current_artifact))
                                 inp = [x - 1 for x in inp]
                                 counter += 1
 
                                 if artifact.experience.level == artifact.experience.limit:
                                     break
 
+                            Inventory.remove_items(artifact_trackers)
+
                             break
 
                     if not is_equipped:
-                        self.artifact_list.add(artifact)  # adds the artifact back
+                        self.add_item(artifact)  # adds the artifact back
 
                 else:
                     WarningText("Artifact is max level!").display()
+
+                artifact.update_server_data()
+
             else:
                 break
 
@@ -296,7 +303,7 @@ class Inventory:
                     break
 
             if not is_equipped:
-                self.weapon_list.add(weapon)  # adds the weapon back
+                self.add_item(weapon)  # adds the weapon back
 
     def manage_weapon(self, weapon):
         while True:
@@ -341,7 +348,7 @@ class Inventory:
                         character.update_stats()
 
                     elif choice == 3:
-                        self.weapon_list.add(character.weapon)
+                        self.add_item(character.weapon)
                         character.weapon = None
 
                     else:
@@ -353,9 +360,14 @@ class Inventory:
                     Text(f"{artifact_index + 1}. {artifact.list_view() if artifact is not None else 'empty'}").display()
                 choice2 = get_int("6. back")
                 if choice2 < 6:
-                    character.artifacts.set(choice2 - 1,
-                                            self.manage_artifact(character.artifacts.get(choice2 - 1), True), True)
+                    character.artifacts.set(
+                        choice2 - 1,
+                        self.manage_artifact(character.artifacts.get(choice2 - 1),
+                                             True),
+                        True)
                     character.update_stats()
+
+                    character.update_server_data()
 
             elif choice == 4:
                 return character
@@ -370,7 +382,7 @@ class Inventory:
             artifact = selection
 
             if artifact_to_swap is not None:
-                self.artifact_list.add(artifact_to_swap)
+                self.add_item(artifact_to_swap)
 
             return artifact
 
@@ -386,10 +398,29 @@ class Inventory:
                 character.weapon = selection
 
                 if character_weapon is not None:
-                    self.weapon_list.add(character_weapon)
+                    self.add_item(character_weapon)
 
                 if character.weapon is not None:
+                    character.weapon.pre_remove()
                     Text(f"You have equipped {character.weapon.name}").display()
+
+                character.update_server_data()
+
+    def add_item(self, item: Entity):
+        if isinstance(item, Artifact):
+            self.artifact_list.add(item)
+            item.create_server_item("artifact")
+        elif isinstance(item, Weapon):
+            self.weapon_list.add(item)
+            item.create_server_item("weapon")
+        elif isinstance(item, Character):
+            self.character_list.add(item)
+            item.create_server_item("character")
+
+    @staticmethod
+    @loading_status
+    def remove_items(items: list):
+        return API.remove_items(items)
 
     def jsonify(self):
         return {
@@ -399,29 +430,20 @@ class Inventory:
             "money": self.money
         }
 
-    def format_length(self, number):
+    @staticmethod
+    def format_length(number):
         if number >= 1000:
             return f"{int(number / 1000)}k"
         return number
 
     def __repr__(self):
-        rating_details = GPSystem.rater.generate_power_details(
-            {'inventory': self.jsonify()}
-        )
-
-        overall_gp = rating_details['rating']
-        ranking = f"{rating_details['ranking']['rank']}[{rating_details['ranking']['tier']}]"
-        character_gp = rating_details['totals']['characters']
-        weapon_gp = rating_details['totals']['weapons']
-        artifact_gp = rating_details['totals']['artifacts']
         return (
             f"""
-{overall_gp["weighted"]}|{overall_gp["unweighted"]}gp {ranking}\t V{GPSystem.version}
 
 ${self.money}
-1. characters\t{self.format_length(self.character_list.get_length())}\t\t {character_gp['weighted']}|{character_gp['unweighted']}gp
-2. weapons   \t{self.format_length(self.weapon_list.get_length())}\t\t {weapon_gp['weighted']}|{weapon_gp['unweighted']}gp
-3. artifacts \t{self.format_length(self.artifact_list.get_length())}\t\t {artifact_gp['weighted']}|{artifact_gp['unweighted']}gp
+1. characters\t{self.format_length(self.character_list.get_length())}
+2. weapons   \t{self.format_length(self.weapon_list.get_length())}
+3. artifacts \t{self.format_length(self.artifact_list.get_length())}
 
 5. sort type    {self.sort_type}
 6. reverse sort {self.reverse_sort}

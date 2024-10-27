@@ -29,6 +29,7 @@ import time
 
 content = ContentManager()
 
+
 class CharacterList:
     """
     Makes a list of characters
@@ -45,16 +46,14 @@ class CharacterList:
         load_data_status.start()
         self.characters = []
         for character in characters:
-            character_check_result = content.check_character(character["name"], character["description"])
-            if character_check_result is not None:
-                character = character_check_result()
-
+            id = character[0]  # id
+            character_data = character[2]  # json data
             artifact_list = ItemList(5, Artifact, True)
-            experience = character["experience"]
-            equips = character["equips"]
+            experience = character_data["experience"]
+            equips = character_data["equips"]
             for artifact in equips["artifacts"]:
                 artifact_list.add(ArtifactObjectHandler(artifact).create_artifact())
-            stat_points = character["stats"]
+            stat_points = character_data["stats"]
             try:
                 weapon = equips["weapon"]
                 weapon = Weapon(
@@ -72,9 +71,9 @@ class CharacterList:
             except TypeError:
                 weapon = None
             new_character = Character(
-                character["name"],
-                character["description"],
-                StarRating(character["star rating"]),
+                character_data["name"],
+                character_data["description"],
+                StarRating(character_data["star rating"]),
                 ExperienceObjectHandler(experience).create_experience(),
                 weapon,
                 artifact_list,
@@ -84,6 +83,7 @@ class CharacterList:
                 stat_points["critRate"],
                 stat_points["critDamage"]
             )
+            new_character.id = id
             self.characters.append(new_character)
             # time.sleep(0.1)
 

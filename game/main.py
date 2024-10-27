@@ -28,17 +28,15 @@ from IO.Input import *
 # interface packages
 from Interface.Interfaces.Login import Login
 
-# built-in packages
-import atexit
-
 # external packages
 import argparse
+import atexit
 
 # important variables
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V1.9.1"
+version = "V2.0.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -61,6 +59,18 @@ Initializing server connection info.
 Incase of someone starting this without arguments we run through try and except blocks.
 If a try bock finds an exception we'll use a default value.
 """
+
+
+def on_exit():
+    if not args.testing:
+        server.API.update_data(GameData.startup_amount, GameData.inventory.money)
+
+        # we want to delete the token last
+        # we can't upload data without the token
+        server.API.token.delete()
+
+
+atexit.register(on_exit)
 
 if args.testing:
     console.rule("Gentry's Quest [DEBUG MODE]")
@@ -102,10 +112,10 @@ else:
         version_differs = version != latest_version
         account_info = AccountInfo(username, password)  # make class to store account info
         user_data = account_data  # game data class initialization
-        user = User(user_data["id"], account_info.username, server.API.get_power_level())  # user class initialization
-        game_data = user_data["metadata"]["Gentry's Quest Classic data"]
-        game_data = GameData(game_data) if game_data else GameData(None)
-        game = Game(game_data, version, server)
+        user = User(user_data["id"], account_info.username)  # user class initialization
+        game_data = server.API.retrieve_data()
+        game_data = GameData(game_data)
+        game = Game(version)
         if version_differs:
             WarningText("You are not on the right Gentry's Quest version!\n"
                         f"Your version: {version}\n"
@@ -116,17 +126,4 @@ else:
             server.API.check_out()
             server.disable()
 
-
-        def byebye():
-            game_status = Status("Uploading data...")
-            game_status.start()
-            game.presence.end()
-            if not server.disabled:
-                server.API.upload_data(game.game_data)
-                server.API.check_out()
-                server.API.token.delete()
-            game_status.stop()
-
-
-        atexit.register(byebye)
         game.start(args.character)

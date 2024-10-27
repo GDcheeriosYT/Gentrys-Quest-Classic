@@ -1,5 +1,6 @@
 # game packages
 # entity packages
+import GameConfig
 from ..Entity import Entity
 from ..Stats.StarRating import StarRating
 from ..Stats.Experience import Experience
@@ -70,7 +71,7 @@ class Weapon(Entity):
         super().__init__(name, description, star_rating, experience)
         self.weapon_type = weapon_type
         self.base_attack = attack
-        self.buff = buff
+        self.buff: Buff = buff
         self.buff.handle_value(self.star_rating.value)
         self.verbs = verbs
         self.settings = [
@@ -94,29 +95,33 @@ class Weapon(Entity):
         self.buff.handle_value(self.star_rating.value)
 
     def list_view(self, index: int = 1):
-        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{f'*{self.buff.attribute_type.abreviate()}'}{'%*' if self.buff.is_percent else '*'}\t{self.experience}"
+        return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{f'*{self.buff.attribute_type.abreviate()}'}{'%*' if self.buff.is_percent else '*'}\t{self.experience}"
 
     def jsonify(self):
-        return {
-            "weapon type": self.weapon_type,
-            "stats": {
-                "attack": self.base_attack,
-                "buff": self.buff.jsonify()
-            },
-            "name": self.name,
-            "description": self.description,
-            "verbs": {
-                "normal": self.verbs.normal,
-                "critical": self.verbs.critical
-            },
-            "experience": {
-                "xp required": self.experience.get_xp_required(self.star_rating.value),
-                "level": self.experience.level,
-                "xp": self.experience.xp,
-                "previous xp required": 0
-            },
-            "star rating": self.star_rating.value
-        }
+        try:
+            return {
+                "id": self.id,
+                "weapon type": self.weapon_type,
+                "stats": {
+                    "attack": self.base_attack,
+                    "buff": self.buff.jsonify()
+                },
+                "name": self.name,
+                "description": self.description,
+                "verbs": {
+                    "normal": self.verbs.normal,
+                    "critical": self.verbs.critical
+                },
+                "experience": {
+                    "xp required": self.experience.get_xp_required(self.star_rating.value),
+                    "level": self.experience.level,
+                    "xp": self.experience.xp,
+                    "previous xp required": 0
+                },
+                "star rating": self.star_rating.value
+            }
+        except AttributeError:
+            return None
 
     def __repr__(self):
         return (

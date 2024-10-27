@@ -1,5 +1,6 @@
 # game packages
 # entity packages
+import GameConfig
 from ..Entity import Entity
 from ..Stats.Buff import Buff
 from ..Stats.Experience import Experience
@@ -156,9 +157,9 @@ class Artifact(Entity):
             counter += 1
 
         try:
-            return f"{text_length_limiter(self.name, len(str(index + 1)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t  {attribute_text}{spacing_text}\t{self.experience}"
+            return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index + 1)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t  {attribute_text}{spacing_text}\t{self.experience}"
         except TypeError:
-            return self.name
+            return f"{f'[{self.id}]' if GameConfig.debug else ''}{self.name}"
 
     def __repr__(self):
         try:
@@ -196,6 +197,7 @@ apart of the {self.family} family
             attributes.append(attribute.jsonify())
 
         return {
+            "id": self.id,
             "stats": {
                 "attributes": attributes,
                 "main attribute": self.main_attribute.jsonify()
