@@ -10,12 +10,9 @@ from GameData import GameData
 from Location.Location import Location
 
 # content packages
-from Content.Locations.Iowa.Iowa import Iowa
 from Content.Stories.Intro import Intro
 from Content.Gachas.ValleyHighSchool import ValleyHighSchool
 from Content.Gachas.BaseGacha import BaseGacha
-from Content.CharacterContentManager import CharacterContentManager
-#from Content.Stories.GentrysQuest import GentrysQuest
 
 # collection packages
 from Collection.ItemList import ItemList
@@ -303,7 +300,7 @@ class Game:
                                     if character_selection:
                                         opponent = player_data.inventory.character_list.get(character_selection - 1)
                                         player = self.equipped_character
-
+                                        
                                         from Graphics.Content.Text.WarningText import WarningText
                                         WarningText(f"{player.name} vs {opponent.name}").display()
 
