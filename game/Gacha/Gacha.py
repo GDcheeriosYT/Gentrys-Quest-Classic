@@ -137,7 +137,7 @@ class Gacha:
 
         for entity in entity_list:
             if entity.star_rating.value == star_rating:
-                entity_pool.append(entity)
+                entity_pool.append(type(entity)())
 
         return entity_pool
 
