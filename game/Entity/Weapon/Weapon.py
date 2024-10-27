@@ -1,5 +1,6 @@
 # game packages
 # entity packages
+import GameConfig
 from ..Entity import Entity
 from ..Stats.StarRating import StarRating
 from ..Stats.Experience import Experience
@@ -94,7 +95,7 @@ class Weapon(Entity):
         self.buff.handle_value(self.star_rating.value)
 
     def list_view(self, index: int = 1):
-        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{f'*{self.buff.attribute_type.abreviate()}'}{'%*' if self.buff.is_percent else '*'}\t{self.experience}"
+        return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{f'*{self.buff.attribute_type.abreviate()}'}{'%*' if self.buff.is_percent else '*'}\t{self.experience}"
 
     def jsonify(self):
         try:

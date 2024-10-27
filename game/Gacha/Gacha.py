@@ -75,6 +75,7 @@ class Gacha:
                     if character.name == object.name:
                         in_inventory = True
                         character.add_xp(character.star_rating.value * 100)
+                        character.update_server_data()
 
                 if not in_inventory:
                     inventory.add_item(object)

@@ -1,9 +1,11 @@
 # game packages
+import GameConfig
 # entity packages
 # collections packages
 from Collection.ItemList import ItemList
 # graphics packages
 from Graphics.Content.Text.WarningText import WarningText
+from Graphics.Status import loading_status
 # IO packages
 from IO.StringMethods import text_length_limiter, star_rating_spacer
 from Online.Server import Server
@@ -93,7 +95,7 @@ class Entity:
             xp(amount)
 
     def list_view(self, index: int = 1):
-        return f"{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
+        return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t{self.experience}"
 
     def gacha_info_view(self):
         return f"{self.name} {self.star_rating}"
@@ -113,14 +115,18 @@ class Entity:
     def add_effect(self, effect):
         self.effects.add(effect)
 
+    @loading_status
     def create_server_item(self, item_type: str):
         if not self.id:
             self.id = Server.get_api().add_item(item_type, self.jsonify())["item"]["id"]
 
+    @loading_status
     def update_server_data(self):
         if self.id:
             Server.get_api().update_item(self.id, self.jsonify())
 
+    @loading_status
     def pre_remove(self):
         if self.id:
             Server.get_api().remove_item(self.id)
+            self.id = None

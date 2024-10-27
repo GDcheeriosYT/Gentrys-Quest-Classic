@@ -187,6 +187,7 @@ class Inventory:
         while True:
             if artifact is None:
                 artifact = self.swap_artifact(artifact)
+                artifact.pre_remove()
                 return artifact
             elif artifact == "":
                 break
@@ -203,7 +204,7 @@ class Inventory:
 
             elif choice == 2:
                 if is_equipped:
-                    self.artifact_list.add(artifact)
+                    self.add_item(artifact)
                     return None
 
             elif choice == 3:
@@ -243,7 +244,7 @@ class Inventory:
                             break
 
                     if not is_equipped:
-                        self.artifact_list.add(artifact)  # adds the artifact back
+                        self.add_item(artifact)  # adds the artifact back
 
                 else:
                     WarningText("Artifact is max level!").display()
@@ -296,7 +297,7 @@ class Inventory:
                     break
 
             if not is_equipped:
-                self.weapon_list.add(weapon)  # adds the weapon back
+                self.add_item(weapon)  # adds the weapon back
 
     def manage_weapon(self, weapon):
         while True:
@@ -341,7 +342,7 @@ class Inventory:
                         character.update_stats()
 
                     elif choice == 3:
-                        self.weapon_list.add(character.weapon)
+                        self.add_item(character.weapon)
                         character.weapon = None
 
                     else:
@@ -353,9 +354,14 @@ class Inventory:
                     Text(f"{artifact_index + 1}. {artifact.list_view() if artifact is not None else 'empty'}").display()
                 choice2 = get_int("6. back")
                 if choice2 < 6:
-                    character.artifacts.set(choice2 - 1,
-                                            self.manage_artifact(character.artifacts.get(choice2 - 1), True), True)
+                    character.artifacts.set(
+                        choice2 - 1,
+                        self.manage_artifact(character.artifacts.get(choice2 - 1),
+                                             True),
+                        True)
                     character.update_stats()
+
+                    character.update_server_data()
 
             elif choice == 4:
                 return character
@@ -370,7 +376,7 @@ class Inventory:
             artifact = selection
 
             if artifact_to_swap is not None:
-                self.artifact_list.add(artifact_to_swap)
+                self.add_item(artifact_to_swap)
 
             return artifact
 
@@ -386,10 +392,13 @@ class Inventory:
                 character.weapon = selection
 
                 if character_weapon is not None:
-                    self.weapon_list.add(character_weapon)
+                    self.add_item(character_weapon)
 
                 if character.weapon is not None:
+                    character.weapon.pre_remove()
                     Text(f"You have equipped {character.weapon.name}").display()
+
+                character.update_server_data()
 
     def add_item(self, item: Entity):
         if isinstance(item, Artifact):
@@ -401,7 +410,6 @@ class Inventory:
         elif isinstance(item, Character):
             self.character_list.add(item)
             item.create_server_item("character")
-
 
     def jsonify(self):
         return {

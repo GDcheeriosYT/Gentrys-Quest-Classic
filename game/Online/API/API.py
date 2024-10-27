@@ -1,20 +1,18 @@
 # online game packages
-from .Login import login
-from .UploadData import upload_data
-from .GetPowerLevel import get_power_level
-from .RecievePlayer import receive_player
-from ..User.User import User
+# external packages
+import time
+
+import requests
 
 # graphics game packages
 from Graphics.Content.Text.WarningText import WarningText
-from Graphics.Content.Text.InfoText import InfoText
-
+from Graphics.Status import loading_status
 # io game packages
 from IO import Window
-
-# external packages
-import time
-import requests
+from .GetPowerLevel import get_power_level
+from .Login import login
+from .RecievePlayer import receive_player
+from ..User.User import User
 
 
 class API:
@@ -48,10 +46,6 @@ class API:
         else:
             API.id = login_result["id"]
             return login_result
-
-    @staticmethod
-    def upload_data(data):
-        upload_data(API.url, API.id, data, API.token.token)
 
     @staticmethod
     def get_power_level():
@@ -121,14 +115,15 @@ class API:
     @staticmethod
     def update_item(id, item_json):
         if id:
-            return requests.post(f"{API.url}/api/gqc/update/{id}", json=item_json,
+            return requests.post(f"{API.url}/api/gqc/update-item/{id}", json=item_json,
                                  headers={"Authorization": API.token.token}).json()
 
     @staticmethod
+    @loading_status
     def update_data(startup_amount: int, money: int):
-        requests.post(f"{API.url}/api/gqc/update-data/{API.id}", json={
+        return requests.post(f"{API.url}/api/gqc/update-data/{API.id}", json={
             'startup amount': startup_amount,
             'money': money
         },
                       headers={"Authorization": API.token.token}
-                      )
+                      ).json()

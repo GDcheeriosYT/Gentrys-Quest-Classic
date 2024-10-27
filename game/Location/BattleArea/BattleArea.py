@@ -306,5 +306,8 @@ class BattleArea(Area):
                 character.update_stats()
             pass
 
+        character.update_server_data()
+
+
     def __repr__(self):
         return f"{self.name} {self.difficulty.__repr__()}"

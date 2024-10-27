@@ -52,12 +52,6 @@ class GameData:
                 elif item[1] == "weapon":
                     weapons.append(item)
 
-            # look for duplications
-            # for character in characters:
-            #     for artifact in character[2]["equips"]["artifacts"]:
-            #     for artifact in chara
-
-
             GameData.inventory = Inventory(money, characters, weapons, artifacts)
             status.stop()
         else:

@@ -55,7 +55,7 @@ class Game:
     locations = None
     story = None
     story_index = None
-    
+
     def __init__(self, version):
         self.version = version
         self.equipped_character = None
@@ -105,10 +105,11 @@ class Game:
         time.sleep(1)
         intro_scene.start(self.equipped_character, GameData.inventory, GameData.content)
         character.weapon = GameData.inventory.weapon_list.content[0]
+        character.weapon.pre_remove()
         GameData.inventory.weapon_list.content.pop(0)
 
     def start(self, character_arg):
-        global GameData
+        global GameData, WarningText
         if GameData.startup_amount == 0:
             self.start_intro(character_arg)
 
@@ -156,7 +157,8 @@ class Game:
                                         self.presence.update_status("At location", location.name.content)
                                         Text(f"you currently have {character} equipped").display()
                                         location.list_areas()
-                                        location.select_area(self.equipped_character, GameData.inventory, GameData.content)
+                                        location.select_area(self.equipped_character, GameData.inventory,
+                                                             GameData.content)
                                     except IndexError:
                                         pass
 
@@ -283,16 +285,19 @@ class Game:
                         elif choices2 == 3:
                             if self.equipped_character:
                                 Window.place_rule("Online PvP")
-                                username = get_string("Who would you like to fight?\nPlease provide a player's username:\n")
+                                username = get_string(
+                                    "Who would you like to fight?\nPlease provide a player's username:\n")
                                 player_data = Server.API.receive_player(username)
-                                if player_data != "Not Found" and player_data["metadata"]["Gentry's Quest Classic data"]:
+                                if player_data != "Not Found" and player_data["metadata"][
+                                    "Gentry's Quest Classic data"]:
                                     player_data_load_status = Status("Loading player data")
                                     player_data_load_status.start()
                                     from GameData import GameData
                                     player_data = GameData(player_data["metadata"]["Gentry's Quest Classic data"])
                                     player_data_load_status.stop()
                                     for character in player_data.inventory.character_list.content:
-                                        Text(f"{player_data.inventory.character_list.get_index(character)+1}. {character.list_view()}").display()
+                                        Text(
+                                            f"{player_data.inventory.character_list.get_index(character) + 1}. {character.list_view()}").display()
 
                                     character_selection = get_int("who would you like to fight against?")
                                     if character_selection:
@@ -312,8 +317,6 @@ class Game:
                             else:
                                 print("please equip a character first!")
                                 time.sleep(1)
-
-
 
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
