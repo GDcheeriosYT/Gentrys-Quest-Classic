@@ -14,7 +14,7 @@ from IO.Input import get_int
 
 class TestGameInterface:
     def __init__(self):
-        self.game = Game(GameData(None), "Testing", None)
+        self.game = Game("Testing")
 
     def start(self):
         while True:

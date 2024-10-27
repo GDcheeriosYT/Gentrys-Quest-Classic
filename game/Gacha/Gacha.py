@@ -1,5 +1,6 @@
 # game packages
 # IO packages
+from Config.NumberSetting import NumberSetting
 from IO.Input import get_int, enter_to_continue
 
 # graphics packages
@@ -87,6 +88,7 @@ class Gacha:
         enter_to_continue()
 
     def manage_input(self, inventory: Inventory):
+        pulling_amount = NumberSetting("Pulling", 1, 0, 10)
         while True:
             choice = get_int("1. pull characters\n"
                              "2. pull weapons\n"
@@ -95,20 +97,22 @@ class Gacha:
 
             if choice == 1:
                 objects_obtained = []
-                choice2 = get_int("How many characters would you like to pull?\n")
-                if inventory.can_afford(self.price * choice2):
-                    inventory.money -= self.price * choice2
-                    for i in range(choice2):
+                print("How many characters would you like to pull?\n")
+                pulling_amount.change_value()
+                if inventory.can_afford(self.price * pulling_amount.value):
+                    inventory.money -= self.price * pulling_amount.value
+                    for i in range(pulling_amount.value):
                         objects_obtained.append(self.pull_character())
 
                 self.generate_output(objects_obtained, inventory)
 
             if choice == 2:
                 objects_obtained = []
-                choice2 = get_int("How many weapons would you like to pull?\n")
-                if inventory.can_afford(self.price * choice2):
-                    inventory.money -= self.price * choice2
-                    for i in range(choice2):
+                print("How many weapons would you like to pull?\n")
+                pulling_amount.change_value()
+                if inventory.can_afford(self.price * pulling_amount.value):
+                    inventory.money -= self.price * pulling_amount.value
+                    for i in range(pulling_amount.value):
                         objects_obtained.append(self.pull_weapon())
 
                 self.generate_output(objects_obtained, inventory)

@@ -62,11 +62,12 @@ If a try bock finds an exception we'll use a default value.
 
 
 def on_exit():
-    server.API.update_data(GameData.startup_amount, GameData.inventory.money)
+    if not args.testing:
+        server.API.update_data(GameData.startup_amount, GameData.inventory.money)
 
-    # we want to delete the token last
-    # we can't upload data without the token
-    server.API.token.delete()
+        # we want to delete the token last
+        # we can't upload data without the token
+        server.API.token.delete()
 
 
 atexit.register(on_exit)
