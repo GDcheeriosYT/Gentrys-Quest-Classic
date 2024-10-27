@@ -73,14 +73,22 @@ class API:
 
     @staticmethod
     def get_leaderboard():
-        player_list: dict = requests.get(f"{API.url}/api/gq/get-leaderboard/0+{int(Window.console.height - 3)}").json()
+        player_list = requests.get(f"{API.url}/api/gqc/get-leaderboard/0+{int(Window.console.height - 3)}").json()
         leaderboard = []
 
-        for id in player_list.keys():
-            user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
-            user.placement = player_list[id]["placement"]
-            user.ranking = player_list[id]["ranking"]["rank"], player_list[id]["ranking"]["tier"]
+        ranking = 1
+        for player in player_list:
+            user = User(
+                player[0],
+                player[1],
+                player[2]
+            )
+
+            user.placement = ranking
+            user.ranking = player[3], player[4]
+
             leaderboard.append(user)
+            ranking += 1
 
         def sort_thing(user: User):
             return user.placement

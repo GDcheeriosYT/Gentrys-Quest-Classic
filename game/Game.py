@@ -34,6 +34,7 @@ from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Text.Text import Text
 from Graphics.Text.Style import Style
 from Graphics.Status import Status
+from Online.API.API import API
 
 # online packages
 from Online.Server import Server
@@ -248,72 +249,20 @@ class Game:
 
                 elif choices == 3:
                     if not Server.disabled:
-                        choices2 = get_int("1. Online Users\n"
-                                           "2. Leaderboard\n"
-                                           "3. Online PvP\n"
-                                           "4. Back")
+                        choices2 = get_int("1. Leaderboard\n"
+                                           "2. Back")
 
                         if choices2 == 1:
-                            Window.place_rule("Online Users")
-                            online_status = Status("Uploading data..")
-                            online_status.start()
-                            Server.API.upload_data(GameData)
-                            online_status.stop()
-                            online_status.modify_status("fetching online users...")
-                            online_status.start()
-                            players = ItemList(content=Server.API.get_online_players())
-                            online_status.stop()
-                            players.list_content(False)
-                            enter_to_continue()
-
-                        elif choices2 == 2:
                             Window.place_rule("Gentry's Quest Leaderboard")
                             online_status = Status("Uploading data..")
                             online_status.start()
-                            Server.API.upload_data(GameData)
                             online_status.stop()
                             online_status.modify_status("fetching leaderboard data...")
                             online_status.start()
-                            players = ItemList(content=Server.API.get_leaderboard())
+                            players = ItemList(content=API.get_leaderboard())
                             online_status.stop()
                             players.list_content(False)
                             enter_to_continue()
-
-                        elif choices2 == 3:
-                            if self.equipped_character:
-                                Window.place_rule("Online PvP")
-                                username = get_string(
-                                    "Who would you like to fight?\nPlease provide a player's username:\n")
-                                player_data = Server.API.receive_player(username)
-                                if player_data != "Not Found" and player_data["metadata"][
-                                    "Gentry's Quest Classic data"]:
-                                    player_data_load_status = Status("Loading player data")
-                                    player_data_load_status.start()
-                                    from GameData import GameData
-                                    player_data = GameData(player_data["metadata"]["Gentry's Quest Classic data"])
-                                    player_data_load_status.stop()
-                                    for character in player_data.inventory.character_list.content:
-                                        Text(
-                                            f"{player_data.inventory.character_list.get_index(character) + 1}. {character.list_view()}").display()
-
-                                    character_selection = get_int("who would you like to fight against?")
-                                    if character_selection:
-                                        opponent = player_data.inventory.character_list.get(character_selection - 1)
-                                        player = self.equipped_character
-                                        
-                                        from Graphics.Content.Text.WarningText import WarningText
-                                        WarningText(f"{player.name} vs {opponent.name}").display()
-
-                                        while player.health.total_value > 0 and opponent.health.total_value > 0:
-                                            print(f"you: {player.health.total_value}")
-                                            print(f"opponent: {opponent.health.total_value}")
-                                            IO.Input.enter_to_continue()
-                                            player.attack_enemy(opponent)
-                                            opponent.attack_enemy(player)
-
-                            else:
-                                print("please equip a character first!")
-                                time.sleep(1)
 
                     else:
                         WarningText("Your server functions are disabled try checking your version...").display()
