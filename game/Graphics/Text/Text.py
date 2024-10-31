@@ -1,5 +1,7 @@
 # game packages
 # graphics packages
+import time
+
 from .Style import Style
 
 # IO packages
@@ -33,10 +35,13 @@ class Text:
         self.content = content
         self.style = style
 
-    def display(self, same_line=False, enter_prompt=False):
+    def display(self, same_line=False, enter_prompt=False, sleep: int = 0):
         Console().print(f"{self.style}{self.content}", end='\r' if same_line else '\n')
         if enter_prompt:
             enter_to_continue()
+
+        if sleep > 0:
+            time.sleep(sleep)
 
     def raw_output(self):
         return f"{self.style}{self.content}[white on black]"

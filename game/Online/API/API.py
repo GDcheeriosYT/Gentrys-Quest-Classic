@@ -26,24 +26,39 @@ class API:
     token = None
     url = None
     id = None
+    _can_check_out = True
 
     def __init__(self, token=None, url=None, id=None):
         API.token = token
         API.url = url
         API.id = id
 
-    def login(self, username, password, do_exit: bool = True):
+    @staticmethod
+    def login(username, password, do_exit: bool = True):
         API.token.verify()
         login_result = login(username, password, API.url)
         if login_result == "nope":
-            WarningText("Couldn't Log In...").display()
-            time.sleep(1)
+            WarningText("Couldn't Log In...").display(sleep=1)
             if do_exit:
                 API.token.delete()
                 exit(0)
             else:
                 return login_result
         else:
+            if login_result["status"] == "restricted":
+                WarningText("Your account is currently restricted...").display(enter_prompt=True)
+                API.token.delete()
+                exit(0)
+
+            elif login_result["status"] == "gqc_online":
+                WarningText("You are currently logged in somewhere else...").display(enter_prompt=True)
+                API.token.delete()
+                exit(0)
+
+            elif login_result["status"] == "test":
+                API._can_check_out = False
+
+            print(f"Welcome {username}!")
             API.id = login_result["id"]
             return login_result
 
@@ -56,24 +71,9 @@ class API:
         return requests.get(f"{API.url}/api/gqc/get-data/{API.id}").json()
 
     @staticmethod
-    def get_online_players():
-        player_list: dict = requests.get(f"{API.url}/api/gq/get-online-players").json()
-        online_players = []
-        for id in player_list.keys():
-            user = User(int(id), player_list[id]["username"], player_list[id]["power level"]["weighted"])
-            user.placement = player_list[id]["placement"]
-            user.ranking = player_list[id]["ranking"]["rank"], player_list[id]["ranking"]["tier"]
-            online_players.append(user)
-
-        def sort_thing(user: User):
-            return user.placement
-
-        online_players.sort(key=sort_thing)
-        return online_players
-
-    @staticmethod
-    def get_leaderboard():
-        player_list = requests.get(f"{API.url}/api/gqc/get-leaderboard/0+{int(Window.console.height - 3)}").json()
+    @loading_status
+    def get_leaderboard(online: bool = False):
+        player_list = requests.get(f"{API.url}/api/gqc/get-leaderboard/0+{int(Window.console.height - 3)}+{'true' if online else 'false'}").json()
         leaderboard = []
 
         ranking = 1
@@ -90,15 +90,18 @@ class API:
             leaderboard.append(user)
             ranking += 1
 
-        def sort_thing(user: User):
-            return user.placement
-
-        leaderboard.sort(key=sort_thing)
         return leaderboard
 
     @staticmethod
+    @loading_status
+    def check_in():
+        requests.post(f"{API.url}/api/gqc/check-in/{API.id}")
+
+    @staticmethod
+    @loading_status
     def check_out():
-        requests.post(f"{API.url}/api/gq/check-out/{API.id}")
+        if API._can_check_out:
+            requests.post(f"{API.url}/api/gq/check-out/{API.id}")
 
     @staticmethod
     def get_version():
@@ -137,9 +140,12 @@ class API:
     @staticmethod
     @loading_status
     def update_data(startup_amount: int, money: int):
-        return requests.post(f"{API.url}/api/gqc/update-data/{API.id}", json={
-            'startup amount': startup_amount,
-            'money': money
-        },
-                             headers={"Authorization": API.token.token}
-                             ).json()
+        return requests.post(f"{API.url}/api/gqc/update-data/{API.id}",
+                             json={
+                                 'startup amount': startup_amount,
+                                 'money': money
+                             },
+                             headers={
+                                 "Authorization": API.token.token
+                             }
+                             )

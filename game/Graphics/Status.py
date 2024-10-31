@@ -10,8 +10,9 @@ def loading_status(func):
 
     def wrapper(*args, **kwargs):
         status.start()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         status.stop()
+        return result
 
     return wrapper
 

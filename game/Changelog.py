@@ -9,12 +9,12 @@ from IO.Input import enter_to_continue
 from IO import Window
 
 # change log groupings
-gameplay = [
-    InfoText("Got rid of settings.")
-]
+gameplay = []
 graphics = []
 content = []
-online = []
+online = [
+    InfoText("Re-added online players leaderboard")
+]
 code_structure = []
 testing = []
 

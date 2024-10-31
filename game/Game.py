@@ -250,17 +250,18 @@ class Game:
                 elif choices == 3:
                     if not Server.disabled:
                         choices2 = get_int("1. Leaderboard\n"
-                                           "2. Back")
+                                           "2. Online players\n"
+                                           "3. Back")
 
                         if choices2 == 1:
                             Window.place_rule("Gentry's Quest Leaderboard")
-                            online_status = Status("Uploading data..")
-                            online_status.start()
-                            online_status.stop()
-                            online_status.modify_status("fetching leaderboard data...")
-                            online_status.start()
                             players = ItemList(content=API.get_leaderboard())
-                            online_status.stop()
+                            players.list_content(False)
+                            enter_to_continue()
+
+                        if choices2 == 2:
+                            Window.place_rule("Online Players")
+                            players = ItemList(content=API.get_leaderboard(True))
                             players.list_content(False)
                             enter_to_continue()
 

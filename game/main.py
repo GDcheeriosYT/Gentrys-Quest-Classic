@@ -36,7 +36,7 @@ import atexit
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V2.0.0"
+version = "V2.1.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -62,12 +62,16 @@ If a try bock finds an exception we'll use a default value.
 
 
 def on_exit():
-    if not args.testing:
-        server.API.update_data(GameData.startup_amount, GameData.inventory.money)
+    if not args.testing and Server.API:
+        # update data
+        Server.API.update_data(GameData.startup_amount, GameData.inventory.money)
 
         # we want to delete the token last
         # we can't upload data without the token
-        server.API.token.delete()
+        Server.API.token.delete()
+
+        # check out player
+        Server.API.check_out()
 
 
 atexit.register(on_exit)
@@ -111,6 +115,9 @@ else:
         latest_version = server.API.get_version()
         version_differs = version != latest_version
         account_info = AccountInfo(username, password)  # make class to store account info
+        if account_data["status"] == "offline":
+            server.API.check_in()
+
         user_data = account_data  # game data class initialization
         user = User(user_data["id"], account_info.username)  # user class initialization
         game_data = server.API.retrieve_data()
