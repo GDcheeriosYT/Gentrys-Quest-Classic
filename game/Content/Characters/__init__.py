@@ -54,3 +54,4 @@ import Content.Characters.SpencerGeorge
 import Content.Characters.WillJohnson
 import Content.Characters.ZachSmith
 import Content.Characters.BenMeier
+import Content.Characters.MekhiElliot
