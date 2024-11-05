@@ -10,4 +10,5 @@ class MekhiElliot(Character):
             StarRating(5),
             None,
             None,
+            default_crit_rate_points=4
         )
