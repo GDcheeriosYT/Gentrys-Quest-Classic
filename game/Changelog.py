@@ -8,10 +8,18 @@ from Graphics.Content.Text.InfoText import InfoText
 from IO.Input import enter_to_continue
 from IO import Window
 
+# github change string
+# "change [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/num]PR\[#num][/link] by author"
+
 # change log groupings
-gameplay = []
+gameplay = [
+    InfoText("Added support to recieve items [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/77]PR\[#77][/link] by GDcheerios"),
+    InfoText("Fixed game crash when artifact swap is None by GDcheerios")
+]
 graphics = []
-content = []
+content = [
+    InfoText("Added Mekhi Elliot Character [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/78]PR\[#78][/link] by GDcheerios")
+]
 online = []
 code_structure = []
 testing = []
