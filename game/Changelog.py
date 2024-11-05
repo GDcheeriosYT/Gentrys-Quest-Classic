@@ -12,9 +12,7 @@ from IO import Window
 gameplay = []
 graphics = []
 content = []
-online = [
-    InfoText("Re-added online players leaderboard")
-]
+online = []
 code_structure = []
 testing = []
 
