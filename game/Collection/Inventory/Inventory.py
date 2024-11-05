@@ -188,7 +188,9 @@ class Inventory:
         while True:
             if artifact is None:
                 artifact = self.swap_artifact(artifact)
-                artifact.pre_remove()
+                if artifact:  # we can get None from swapping
+                    artifact.pre_remove()
+
                 return artifact
             elif artifact == "":
                 break
