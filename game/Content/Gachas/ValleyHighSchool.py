@@ -48,6 +48,7 @@ from Content.Characters.PeteMarks import PeteMarks
 from Content.Characters.MJ import MJ
 from Content.Characters.ZachSmith import ZachSmith
 from Content.Characters.BenMeier import BenMeier
+from Content.Characters.MekhiElliot import MekhiElliot
 
 # weapons
 from Content.Weapons.AlecsRock import AlecsRock
@@ -118,7 +119,8 @@ class ValleyHighSchool(Gacha):
                 PeteMarks(),
                 MJ(),
                 ZachSmith(),
-                BenMeier()
+                BenMeier(),
+                MekhiElliot(),
             ],
             [
                 AlecsRock(),
