@@ -15,6 +15,7 @@ from IO.Input import get_int
 class TestGameInterface:
     def __init__(self):
         self.game = Game("Testing")
+        GameData()
 
     def start(self):
         while True:
@@ -23,13 +24,12 @@ class TestGameInterface:
                              "3. quit")
 
             if choice == 1:
-                self.game.start(None)
+                self.game.start()
 
             elif choice == 2:
-                test_inventory_interface = InventoryTestInterface()
-                test_inventory_interface.inventory = self.game.game_data.inventory
+                test_inventory_interface = InventoryTestInterface(GameData.inventory)
                 test_inventory_interface.__repr__()
-                self.game.game_data.inventory = test_inventory_interface.inventory
+                GameData.inventory = test_inventory_interface.inventory
 
             else:
                 break

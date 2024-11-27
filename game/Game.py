@@ -1,4 +1,5 @@
 # game packages
+import GameConfig
 import IO.Input
 from Changelog import display_changelog
 
@@ -56,48 +57,29 @@ class Game:
 
     def __init__(self, version):
         self.version = version
+        GameConfig.version = version
         self.equipped_character = None
         self.locations = ItemList(content_type=Location)
         self.story = GentrysQuest()
         self.story_index = 0
         self.presence = GamePresence()
 
-    def start_intro(self, character_name):
+    def start_intro(self):
         self.presence.update_status("Playing intro")
         intro_scene = Intro()
         Window.clear()
         characters = GameData.content.characters
-        self.equipped_character = None
-        if character_name is not None:
-            for character in characters:
-                try:
-                    character = character()
-                    if character.name == character_name:
-                        Text("Thanks for contributing to Gentry's Quest!\nAs a gift take this:").display()
-                        Text(character.list_view()).display()
-                        self.equipped_character = character
-                        enter_to_continue()
-                        break
-                except TypeError:
-                    pass
-
-            if self.equipped_character is None:
-                WarningText("We couldn't find this character...").display()
-                exit(1)
-
-        else:
-            name = get_string("What is this protagonists name?\n")
-            character = Character(
-                name,
-                "The Guy",
-                default_attack_points=1,
-                default_health_points=1,
-                default_defense_points=1,
-                default_crit_damage_points=1,
-                default_crit_rate_points=1
-            )
-            self.equipped_character = character
-
+        name = get_string("What is this protagonists name?\n")
+        character = Character(
+            name,
+            "The Guy",
+            default_attack_points=1,
+            default_health_points=1,
+            default_defense_points=1,
+            default_crit_damage_points=1,
+            default_crit_rate_points=1
+        )
+        self.equipped_character = character
         self.equipped_character.weapon = Weapon()
         GameData.inventory.add_item(character)
         time.sleep(1)
@@ -106,10 +88,9 @@ class Game:
         character.weapon.pre_remove()
         GameData.inventory.weapon_list.content.pop(0)
 
-    def start(self, character_arg):
-        global GameData, WarningText
+    def start(self):
         if GameData.startup_amount == 0:
-            self.start_intro(character_arg)
+            self.start_intro()
 
         GameData.startup_amount += 1
         in_game = True

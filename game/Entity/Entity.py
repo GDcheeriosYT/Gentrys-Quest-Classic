@@ -8,6 +8,7 @@ from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Status import loading_status
 # IO packages
 from IO.StringMethods import text_length_limiter, star_rating_spacer
+from Online.API.API import api_request
 from Online.Server import Server
 from .Stats.Effect.Effect import Effect
 from .Stats.Experience import Experience
@@ -115,17 +116,17 @@ class Entity:
     def add_effect(self, effect):
         self.effects.add(effect)
 
-    @loading_status
+    @api_request
     def create_server_item(self, item_type: str):
         if not self.id:
             self.id = Server.get_api().add_item(item_type, self.jsonify())["item"]["id"]
 
-    @loading_status
+    @api_request
     def update_server_data(self):
         if self.id:
             Server.get_api().update_item(self.id, self.jsonify())
 
-    @loading_status
+    @api_request
     def pre_remove(self):
         if self.id:
             Server.get_api().remove_item(self.id)

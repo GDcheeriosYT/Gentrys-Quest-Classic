@@ -15,27 +15,29 @@ from Graphics.Status import Status
 
 class Server:
     url = None
-    API = None
     disabled = None
 
-    def __init__(self, url="https://gdcheerios.com"):
+    def __init__(self, url=None):
         Server.url = url
-        Server.disabled = False
-        server_status = Status("connecting to server", "point")
-        try:
-            server_status.start()
-            requests.get(self.url)
-        except:
+        if url:
+            Server.disabled = False
+            server_status = Status("connecting to server", "point")
+            try:
+                server_status.start()
+                requests.get(self.url)
+            except:
+                server_status.stop()
+                WarningText(f"Couldn't connect to server({self.url})...").display(sleep=2)
+                exit(1)
             server_status.stop()
-            WarningText(f"Couldn't connect to server({self.url})...").display(sleep=2)
-            exit(1)
-        server_status.stop()
-        Server.API = API(Token(self.url), self.url)
+            API.token = Token(self.url)
+            API.url = self.url
+        else:
+            self.disable()
 
     @staticmethod
     def disable():
-        Server.url = None
-        Server.API = None
+        API.disabled = True
         Server.disabled = True
 
     @staticmethod

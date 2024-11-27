@@ -32,7 +32,7 @@ class GameData:
     settings = None
     content = None
 
-    def __init__(self, json_data):
+    def __init__(self, json_data=None):
         GameData.content = ContentManager()
         if json_data:
             status = Status(text="Loading data")

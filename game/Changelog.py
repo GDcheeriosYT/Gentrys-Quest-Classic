@@ -13,16 +13,19 @@ from IO import Window
 
 # change log groupings
 gameplay = [
-    InfoText("Added support to recieve items [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/77]PR\[#77][/link] by GDcheerios"),
-    InfoText("Fixed game crash when artifact swap is None by GDcheerios")
+    InfoText("Added disclaimer for exiting the game properly"),
+    InfoText("Added afk farm into gentrys quest")
 ]
 graphics = []
-content = [
-    InfoText("Added Mekhi Elliot Character [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/78]PR\[#78][/link] by GDcheerios")
-]
+content = []
 online = []
-code_structure = []
-testing = []
+code_structure = [
+    InfoText("Removed character argument from startup"),
+    InfoText("Made new api_request decorator")
+]
+testing = [
+    InfoText("Fixed testing to ignore api")
+]
 
 
 def display_changelog(version: str):

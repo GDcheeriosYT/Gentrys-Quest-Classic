@@ -2,6 +2,7 @@
 # interface packages
 import traceback
 
+from GameData import GameData
 from Interface.Interface import Interface
 from Interface.InterfaceContent import InterfaceContent
 from .InventoryTestInterface import InventoryTestInterface
@@ -16,7 +17,7 @@ class InventoryInterface(Interface):
     def __repr__(self):
         action = self.visit()
         if action == 0:
-            test_interface = InventoryTestInterface()
+            test_interface = InventoryTestInterface(GameData.inventory)
             while True:
                 try:
                     test_interface.__repr__()

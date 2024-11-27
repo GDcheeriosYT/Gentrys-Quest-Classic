@@ -31,8 +31,16 @@ class Location:
 
     def select_area(self, character, inventory, content):
         choice = get_int("Select an area") - 1
+        choice2 = get_int("1. regular fight\n"
+                          "2. afk farm\n"
+                          "3. back")
         try:
-            self.areas[choice].start(character, inventory, content)
+            if choice2 == 1:
+                self.areas[choice].start(character, inventory, content)
+            elif choice2 == 2:
+                self.areas[choice].afk(character, inventory, content)
+            else:
+                pass
         except IndexError:
             pass
 

@@ -1,13 +1,16 @@
 # list of colors https://rich.readthedocs.io/en/stable/appendix/colors.html
 import json
 import os
+import time
 
 # online packages
 from rich.console import Console
 
+import GameConfig
 # game packages
 from GameData import GameData
 from Game import Game
+from Online.API.API import API
 
 # online game packages
 from Online.Server import Server
@@ -17,7 +20,6 @@ from Online.User.User import User
 # graphic game packages
 from Graphics.Content.Text.WarningText import WarningText
 from Graphics.Content.Text.InfoText import InfoText
-from Graphics.Status import Status
 
 # testing packages
 from testing.TestingHandler import TestingHandler
@@ -36,7 +38,7 @@ import atexit
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V2.2.0"
+version = "V2.3.0"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
@@ -44,7 +46,6 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument("-s", "--server")
-parser.add_argument("-c", "--character")
 parser.add_argument("-t", "--testing", action="store_true")
 args = parser.parse_args()
 
@@ -62,27 +63,35 @@ If a try bock finds an exception we'll use a default value.
 
 
 def on_exit():
-    if not args.testing and Server.API:
+    if not args.testing and not API.disabled:
         # update data
-        Server.API.update_data(GameData.startup_amount, GameData.inventory.money)
+        API.update_data(GameData.startup_amount, GameData.inventory.money)
 
         # we want to delete the token last
         # we can't upload data without the token
-        Server.API.token.delete()
+        API.token.delete()
 
         # check out player
-        Server.API.check_out()
+        API.check_out()
 
 
 atexit.register(on_exit)
 
 if args.testing:
     console.rule("Gentry's Quest [DEBUG MODE]")
+    server = Server()
     TestingHandler().start()
 else:
     username = None
     password = None
     account_data = None
+    WarningText("DO NOT CLOSE THE CONSOLE WINDOW RUNNING THIS GAME").display()
+    InfoText("You will not be properly logged out from the game and won't be able to log in again.\n"
+             "If this does happen you'll have to ask me(GDcheerios) to help.\n"
+             "You can contact me through the discord via my [link=https://gdcheerios.com]website[/link]").display(sleep=5)
+    enter_to_continue()
+    console.clear()
+    time.sleep(1)
     console.rule("Gentry's Quest Classic")
     if args.server is None:
         server = Server("https://gdcheerios.com")  # default server url
@@ -94,7 +103,7 @@ else:
         if isinstance(account_info, str):
             username = get_string("username")
             password = enter_password("password: ")
-            account_data = server.API.login(username, password, False)
+            account_data = API.login(username, password, False)
             if account_data == "nope":
                 username, password = None, None
             else:
@@ -107,20 +116,20 @@ else:
         else:
             username = account_info.username
             password = account_info.password
-            account_data = server.API.login(username, password)
+            account_data = API.login(username, password)
             if account_data == "nope":
                 username, password = None, None
 
     if username is not None and password is not None:
-        latest_version = server.API.get_version()
+        latest_version = API.get_version()
         version_differs = version != latest_version
         account_info = AccountInfo(username, password)  # make class to store account info
         if account_data["status"] == "offline":
-            server.API.check_in()
+            API.check_in()
 
         user_data = account_data  # game data class initialization
         user = User(user_data["id"], account_info.username)  # user class initialization
-        game_data = server.API.retrieve_data()
+        game_data = API.retrieve_data()
         game_data = GameData(game_data)
         game = Game(version)
         if version_differs:
@@ -130,7 +139,7 @@ else:
                         "You will not be able to use online features...\n"
                         "You can get the latest version from [link=https://gdcheerios.com/gentrys-quest]https://gdcheerios.com/gentrys-quest[/link].").display()
             enter_to_continue()
-            server.API.check_out()
+            API.check_out()
             server.disable()
 
-        game.start(args.character)
+        game.start()

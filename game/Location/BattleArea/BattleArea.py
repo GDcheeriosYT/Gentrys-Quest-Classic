@@ -1,5 +1,8 @@
 # game packages
 # location packages
+import time
+
+from Graphics.Status import Status
 from ..Area.Area import Area
 from .Difficulty import Difficulty
 
@@ -133,7 +136,7 @@ class BattleArea(Area):
 
         return enemies
 
-    def initialize_artifacts(self, difficulty, families):
+    def initialize_artifacts(self, difficulty, families) -> list:
         points = (self.get_difficulty(difficulty) + 1) * 50
         artifacts = []
         artifacts_to_choose_from = []
@@ -222,6 +225,46 @@ class BattleArea(Area):
         enter_to_continue()
         raise EndException
 
+    def afk(self, character, inventory, content):
+        try:
+            if character is None:
+                WarningText("You have nobody equipped :|").display()
+                self.results(0, 0, 0, ItemList(content_type=Artifact))
+
+            afk_status = Status("Farming")
+            start = time.time()  # start a timer
+            afk_status.start()
+            enter_to_continue()
+            afk_status.stop()
+            total_time = time.time() - start
+
+            calc_status = Status("fetching results")
+            calc_status.start()
+
+            # money calculation
+            second_to_money_ratio = 1  # how much money each second
+            money = (character.difficulty * second_to_money_ratio) * int(total_time)
+
+            # xp calculation
+            xp = int(total_time)
+            character.add_xp(xp)
+
+            # artifact calculation
+            artifacts = ItemList(content_type=Artifact)
+            for i in range(int(total_time / 60)):
+                for artifact in self.initialize_artifacts(character.difficulty, content.families):
+                    artifacts.add(artifact)
+                    inventory.add_item(artifact)
+
+            # end
+            calc_status.stop()
+            self.results(100, money, xp, artifacts)
+        except EndException:
+            if character is not None:
+                character.update_stats()
+                character.update_server_data()
+            pass
+
     def start(self, character, inventory, content):
         turn_counter = 0
         try:
@@ -229,10 +272,10 @@ class BattleArea(Area):
                 WarningText("You do not have a character equipped!").display()
                 raise EndException
             character.update_stats()
-            character_effects = []
             Text(f"You enter {self.name}!").display()
             enemies = ItemList(content_type=Enemy, content=self.initialize_enemies(character))
-            artifacts = ItemList(content_type=Artifact, content=self.initialize_artifacts(character.difficulty, content.families))
+            artifacts = ItemList(content_type=Artifact,
+                                 content=self.initialize_artifacts(character.difficulty, content.families))
             enemies_killed = 0
             money = 0
             xp = 0
@@ -243,14 +286,15 @@ class BattleArea(Area):
                 percentage = int((enemies_killed / len(enemies.content)) * 100)
 
             for enemy in enemies.content:
-                enemy_effects = []
                 calculate_percentage()
                 Text(f"{character.name} encountered a {enemy}").display()
                 enemy.show_stats()
                 while True:
                     Text(f"\n{enemy.name if turn_counter != 0 else ''}").display()
-                    if turn_counter != 0: enemy.show_stats()
-                    else: print("")
+                    if turn_counter != 0:
+                        enemy.show_stats()
+                    else:
+                        print("")
                     Text(f"{character.name} health: {character.health.total_value}\n").display()
                     options = character.get_battle_options()
                     if self.is_runnable:
@@ -260,9 +304,6 @@ class BattleArea(Area):
                         print(f"{options.index(option) + 1}. {option}")
 
                     if character.manage_battle_input(get_int(""), enemy, options):
-                        for effect in character.effects.content:
-                            if turn_counter % effect.variables.round_cooldown == 0:
-                                enemy_effects.append(LiveEffect(effect.details, effect.variables))
                         if enemy.health.total_value <= 0:
                             Text(f"{enemy.name} is dead\n"
                                  f"you received ${enemy.get_money()} and {enemy.get_xp()}xp").display()
@@ -273,19 +314,11 @@ class BattleArea(Area):
                             enter_to_continue()
                             break
                         else:
-                            for effect in enemy_effects:
-                                effect.affect(enemy)
                             enemy.attack_character(character)
-                            for effect in enemy.effects.content:
-                                if turn_counter % effect.variables.round_cooldown == 0:
-                                    character_effects.append(LiveEffect(effect.details, effect.variables))
                             if character.health.total_value <= 0:
                                 WarningText(f"{character.name} has died").display()
                                 enter_to_continue()
                                 self.results(percentage, money, xp)
-
-                            for effect in character_effects:
-                                effect.affect(character)
                     else:
                         if self.is_runnable:
                             self.results(percentage, money, xp)
@@ -306,8 +339,6 @@ class BattleArea(Area):
                 character.update_stats()
                 character.update_server_data()
             pass
-
-
 
     def __repr__(self):
         return f"{self.name} {self.difficulty.__repr__()}"

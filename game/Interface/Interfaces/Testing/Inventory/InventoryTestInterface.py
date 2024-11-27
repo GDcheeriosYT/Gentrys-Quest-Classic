@@ -33,8 +33,8 @@ for family in families:
 
 
 class InventoryTestInterface:
-    def __init__(self):
-        self.inventory = Inventory(None)
+    def __init__(self, game_data_inventory: Inventory):
+        self.inventory = game_data_inventory
 
     def change_money(self):
         money = NumberSetting("money", self.inventory.money, 0)
@@ -42,14 +42,14 @@ class InventoryTestInterface:
         self.inventory.money = money.value
 
     def add_character(self):
-        self.inventory.character_list.add(Character("Test Character", "just a test character.", experience=Experience()))
+        self.inventory.add_item(Character("Test Character", "just a test character.", experience=Experience()))
 
     def add_artifact(self):
         artifact = random.choice(artifacts)
-        self.inventory.artifact_list.add(artifact(StarRating(random.randint(1, 5))))
+        self.inventory.add_item(artifact(StarRating(random.randint(1, 5))))
 
     def add_weapon(self):
-        self.inventory.weapon_list.add((Weapon("Test Weapon", "just a test weapon.", experience=Experience())))
+        self.inventory.add_item((Weapon("Test Weapon", "just a test weapon.", experience=Experience())))
 
     def __repr__(self):
         while True:
