@@ -244,6 +244,7 @@ class BattleArea(Area):
             # money calculation
             second_to_money_ratio = 1  # how much money each second
             money = (character.difficulty * second_to_money_ratio) * int(total_time)
+            inventory.money += money
 
             # xp calculation
             xp = int(total_time)

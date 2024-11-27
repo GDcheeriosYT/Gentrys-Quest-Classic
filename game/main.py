@@ -38,7 +38,7 @@ import atexit
 console = Console()  # the console
 Window.clear()  # clear window
 
-version = "V2.3.0"
+version = "V2.3.1"
 
 parser = argparse.ArgumentParser(
     prog="Gentry's Quest",
