@@ -12,20 +12,12 @@ from IO import Window
 # "change [link=https://github.com/GDcheeriosYT/Gentrys-Quest-Python/pull/num]PR\[#num][/link] by author"
 
 # change log groupings
-gameplay = [
-    InfoText("Added disclaimer for exiting the game properly"),
-    InfoText("Added afk farm into gentrys quest")
-]
+gameplay = []
 graphics = []
 content = []
 online = []
-code_structure = [
-    InfoText("Removed character argument from startup"),
-    InfoText("Made new api_request decorator")
-]
-testing = [
-    InfoText("Fixed testing to ignore api")
-]
+code_structure = []
+testing = []
 
 
 def display_changelog(version: str):

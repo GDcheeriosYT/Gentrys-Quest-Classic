@@ -2,6 +2,7 @@
 # graphics packages
 from Graphics.Text.Text import Text
 from Graphics.Text.Style import Style
+from Graphics.Colors import Colors
 
 
 # external packages
@@ -30,5 +31,14 @@ class StarRating:
             return Text(f"***[white]", Style(text_color="bright_cyan")).raw_output()
         elif self.value == 4:
             return Text(f"****[white]", Style(text_color="bright_magenta")).raw_output()
-        else:
+        elif self.value == 5:
             return Text(f"*****[white]", Style(text_color="bright_yellow")).raw_output()
+        else:
+            stars = ("[red on black]"
+                     "*[orange3 on black]"
+                     "*[yellow on black]"
+                     "*[green on black]"
+                     "*[blue on black]"
+                     "*[violet on black]*")
+
+            return Text(stars, style=Style(text_color="white")).raw_output()

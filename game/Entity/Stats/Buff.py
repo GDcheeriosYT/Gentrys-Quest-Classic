@@ -70,13 +70,49 @@ class Buff:
         ]
         self.value = 0
 
-    def handle_value(self, star_rating):
-        calculation = ((self.experience.level * 1.75) + (star_rating * 1.25) + (star_rating * int(self.experience.level / star_rating)))
-        if self.attribute_type == StatTypes.CritRate:
-            calculation /= 4
+    def handle_value(self, star_rating: int) -> None:
+        """
+        Determines the value of the buff.
+        :param star_rating: the star rating of the parent
+        """
+
+        min_value = 0  # the minimum value
+        star_rating_influence = 0  # how much the star rating will influence the value
+        level_influence = 0  # how much level will influence the value
+        percent_change = 1  # how much the value will change depending on if it's a percent
+
+        if self.attribute_type == StatTypes.Health:
+            min_value = 100
+            star_rating_influence = 25
+            level_influence = 30
+            percent_change = 15
+
+        elif self.attribute_type == StatTypes.Attack:
+            min_value = 10
+            star_rating_influence = 10
+            level_influence = 5
+            percent_change = 1.5
+
+        elif self.attribute_type == StatTypes.Defense:
+            min_value = 10
+            star_rating_influence = 6
+            level_influence = 4
+            percent_change = 2
+
+        elif self.attribute_type == StatTypes.CritRate:
+            min_value = 2
+            star_rating_influence = 2
+            level_influence = 2
+
         elif self.attribute_type == StatTypes.CritDamage:
-            calculation /= 2.5
-        self.value = int(calculation * (1 if self.attribute_type == StatTypes.CritRate else 4)) if not self.is_percent else float(calculation)
+            min_value = 2
+            star_rating_influence = 2
+            level_influence = 2
+
+        if not self.is_percent:
+            percent_change = 1
+
+        self.value = int((min_value + (star_rating * star_rating_influence) + (self.experience.level * level_influence)) / percent_change)
 
     def __repr__(self):
         return f"{self.attribute_type.name} {self.value}{'%' if self.is_percent else ''}"

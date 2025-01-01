@@ -148,7 +148,6 @@ class BattleArea(Area):
 
         if len(artifacts_to_choose_from) > 0:
             while points >= 25:
-                # print(points)
                 artifact = random.choice(artifacts_to_choose_from)
                 star_rating = 1
 

@@ -145,19 +145,22 @@ class Artifact(Entity):
         return string
 
     def list_view(self, index: int = 1):
-        attribute_text = f"*{self.main_attribute.attribute_type.abreviate()}{'%' if self.main_attribute.is_percent else ''}* "
-        for buff in self.attributes:
-            attribute_text += f"{buff.attribute_type.abreviate()}{'%' if buff.is_percent else ''} "
-        spacing_text = "      "
+        attribute_parts = [
+            f"*{self.main_attribute.attribute_type.abreviate()}{'%' if self.main_attribute.is_percent else ''}*"]
+        attribute_parts.extend(
+            f"{buff.attribute_type.abreviate()}{'%' if buff.is_percent else ''}" for buff in self.attributes)
+        attribute_text = ' '.join(attribute_parts)
 
-        counter = len(attribute_text)
-
-        while counter < (8 * 4):
-            spacing_text += " "
-            counter += 1
+        required_length = 8 * 4
+        spacing_length = max(required_length - len(attribute_text), 0)
+        spacing_text = ' ' * spacing_length
 
         try:
-            return f"{f'[{self.id}]' if GameConfig.debug else ''}{text_length_limiter(self.name, len(str(index + 1)))}{star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)}\t  {attribute_text}{spacing_text}\t{self.experience}"
+            debug_id = f"[{self.id}]" if GameConfig.debug else ''
+            limited_name = text_length_limiter(self.name, len(str(index + 1)))
+            star_rating = star_rating_spacer(self.star_rating.__repr__(), self.star_rating.value)
+
+            return f"{debug_id}{limited_name}{star_rating}\t  {attribute_text}{spacing_text}\t{self.experience}"
         except TypeError:
             return f"{f'[{self.id}]' if GameConfig.debug else ''}{self.name}"
 
