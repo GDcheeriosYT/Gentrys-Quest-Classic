@@ -2,4 +2,5 @@ rich~=13.7.0
 requests~=2.32.0
 pypresence~=4.2.1
 pyinstaller~=6.11.1
+pyperclip~=1.9.0
 GPSystem @ git+https://github.com/GDcheeriosYT/GPSystem.git
